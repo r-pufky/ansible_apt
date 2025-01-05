@@ -1,0 +1,12 @@
+---
+- name: 'List of lists | prepare'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'List of lists | prepare | add packages to be removed'
+      ansible.builtin.apt:
+        name:
+          - 'git'
+          - 'curl'
+          - 'git-lfs'
+        state: 'present'

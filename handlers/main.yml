@@ -1,0 +1,10 @@
+---
+###############################################################################
+# Debian Handlers
+###############################################################################
+
+- name: 'Handlers | restart unattended-upgrades'
+  ansible.builtin.service:
+    name: 'unattended-upgrades'
+    state: 'restarted'
+    enabled: true

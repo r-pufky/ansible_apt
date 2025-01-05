@@ -1,0 +1,65 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# APT Options
+###############################################################################
+
+# Should apt dist-upgrade be run (after sources updated)? Default: false.
+apt_dist_upgrade_enable: false
+
+# Timeout for dist-upgrade to complete (seconds). Default: 600.
+apt_timeout: 600
+
+# Number of polling attempts between apt_timeout (count). Default: 5.
+apt_poll: 5
+
+# Ansible APT package state.
+#
+# Values:
+#      absent: remove apt_packages
+#   build-dep: install build dependencies with apt_packages
+#      latest: install latest apt_packages version
+#     present: ensure apt_packages are installed
+#       fixed: attempt to fix installed apt_packages
+#
+# Default: 'present'.
+#
+# Reference:
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
+apt_package_state: 'present'
+
+# Autoremove unused dependencies (except build-dep).
+#
+# Default: True.
+#
+# Reference:
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
+apt_package_autoremove: true
+
+# Purge package configuration files on remove?
+#
+# Default: True.
+#
+# Reference:
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
+apt_package_purge: true
+
+# Install recommended packages in addition to apt_packages?
+#
+# Suggested packages are never installed.
+#
+# Default: True.
+#
+# Reference:
+# *https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-install_recommends
+apt_package_install_recommends: true
+
+# Update APT cache before package operation?
+#
+# dist-upgrades will **always** update cache.
+#
+# Default: False.
+#
+# Reference:
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-update_cache
+apt_package_update_cache: false

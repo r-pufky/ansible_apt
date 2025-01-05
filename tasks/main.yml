@@ -1,0 +1,12 @@
+---
+- name: 'Install packages'
+  ansible.builtin.apt:
+    name: '{{ apt_role_packages }}'
+    state: 'present'
+
+- name: 'Sources'
+  ansible.builtin.import_tasks: 'sources.yml'
+- name: 'Packages'
+  ansible.builtin.import_tasks: 'packages.yml'
+- name: 'Unattended'
+  ansible.builtin.import_tasks: 'unattended.yml'

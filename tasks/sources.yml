@@ -1,0 +1,55 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Apt Source List
+###############################################################################
+# Reference:
+# * https://wiki.debian.org/SourcesList
+
+- name: 'Sources | modify apt sources'
+  when: apt_sources | length > 0
+  block:
+    - name: 'Sources | add apt source'
+      ansible.builtin.deb822_repository:
+        allow_downgrade_to_insecure: '{{ item.allow_downgrade_to_insecure | default(omit) }}'
+        allow_insecure: '{{ item.allow_insecure | default(omit) }}'
+        allow_weak: '{{ item.allow_weak | default(omit) }}'
+        architectures: '{{ item.architectures | default(omit) }}'
+        by_hash: '{{ item.by_hash | default(omit) }}'
+        check_valid_until: '{{ item.check_valid_until | default(omit) }}'
+        components: '{{ item.components | default(omit) }}'
+        date_max_future: '{{ item.date_max_future | default(omit) }}'
+        enabled: '{{ item.enabled | default(omit) }}'
+        inrelease_path: '{{ item.inrelease_path | default(omit) }}'
+        languages: '{{ item.languages | default(omit) }}'
+        mode: '{{ item.mode | default("0644") }}'
+        name: '{{ item.name }}'
+        pdiffs: '{{ item.pdiffs | default(omit) }}'
+        signed_by: '{{ item.signed_by }}'
+        state: '{{ item.state | default("present") }}'
+        suites: '{{ item.suites | default(omit) }}'
+        targets: '{{ item.targets | default(omit) }}'
+        trusted: '{{ item.trusted | default(omit) }}'
+        types: '{{ item.types | default(["deb"]) }}'
+        uris: '{{ item.uris }}'
+      loop: '{{ apt_sources }}'
+
+    - name: 'Sources | update cache'
+      ansible.builtin.apt:
+        update_cache: true
+
+- name: 'Sources | distribution'
+  when: apt_dist_upgrade_enable
+  block:
+    - name: 'Sources | distribution | upgrade in progress (may take a while)'
+      ansible.builtin.debug:
+        msg: |
+          Distribution is being upgraded. This will take a few minutes.
+
+    - name: 'Sources | distribution | upgrade packages'
+      ansible.builtin.apt:
+        upgrade: 'dist'
+        state: '{{ apt_package_state | default(apt_role_package_state) }}'
+        update_cache: true
+      async: '{{ apt_timeout | default(apt_role_timeout) }}'
+      poll: '{{ apt_poll | default(apt_role_poll) }}'

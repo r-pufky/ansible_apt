@@ -1,0 +1,51 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Unattended Updates and Upgrades.
+###############################################################################
+# Setup automatic updates and reboots.
+#
+# Decision: enabling updates will install package but not remove them - in prod
+#     use this allows for temporarily disabling if there are package problems,
+#     without package thrashing.
+#
+# Reference:
+# * https://wiki.debian.org/UnattendedUpgrades
+# * /etc/cron.daily/apt-compat
+# * /usr/lib/apt/apt.systemd.daily
+
+- name: 'Unattended'
+  when: apt_unattended_enable
+  block:
+    - name: 'Unattended | install packages'
+      ansible.builtin.apt:
+        name: '{{ apt_role_unattended_packages }}'
+        autoremove: '{{ apt_package_autoremove | default(true) }}'
+        purge: '{{ apt_package_purge | default(true) }}'
+        update_cache: '{{ apt_package_update_cache | default(false) }}'
+        install_recommends: '{{ apt_package_install_recommends | default(true) }}'
+        state: 'present'
+
+    - name: 'Unattended | install AC power management detection'
+      when: apt_unattended_ac_only_enable
+      ansible.builtin.apt:
+        name: '{{ apt_role_ac_power_packages }}'
+        state: '{{ apt_package_state | default(apt_role_package_state) }}'
+
+    - name: 'Unattended | configure /etc/apt/apt.conf.d/20auto-upgrades'
+      notify: 'Handlers | restart unattended-upgrades'
+      ansible.builtin.template:
+        src: '20auto-upgrades.j2'
+        dest: '/etc/apt/apt.conf.d/20auto-upgrades'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+
+    - name: 'Unattended | configure /etc/apt/apt.conf.d/52unattended-upgrades-local'
+      notify: 'Handlers | restart unattended-upgrades'
+      ansible.builtin.template:
+        src: '52unattended-upgrades-local.j2'
+        dest: '/etc/apt/apt.conf.d/52unattended-upgrades-local'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'

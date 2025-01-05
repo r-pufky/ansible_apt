@@ -1,0 +1,24 @@
+---
+###############################################################################
+# Install packages.
+###############################################################################
+
+- name: 'Packages | remove'
+  when: apt_packages_absent | length > 0
+  ansible.builtin.apt:
+    name: '{{ apt_packages_absent | default([]) | flatten }}'
+    autoremove: '{{ apt_package_autoremove | default(true) }}'
+    purge: '{{ apt_package_purge | default(true) }}'
+    update_cache: '{{ apt_package_update_cache | default(false) }}'
+    install_recommends: '{{ apt_package_install_recommends | default(true) }}'
+    state: 'absent'
+
+- name: 'Packages | install'
+  when: apt_packages | length > 0
+  ansible.builtin.apt:
+    name: '{{ apt_packages | default([]) | flatten }}'
+    autoremove: '{{ apt_package_autoremove | default(true) }}'
+    purge: '{{ apt_package_purge | default(true) }}'
+    update_cache: '{{ apt_package_update_cache | default(false) }}'
+    install_recommends: '{{ apt_package_install_recommends | default(true) }}'
+    state: '{{ apt_package_state | default(apt_role_package_state) }}'

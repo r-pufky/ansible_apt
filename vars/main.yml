@@ -1,0 +1,31 @@
+---
+###############################################################################
+# Debian Role Options
+###############################################################################
+
+# Last time debian options were validated against a default configuration.
+apt_role_validate_date: '2024-06-25'
+apt_role_validate_release: 'bookworm'
+
+# Default state for apt package installation. See ansible.builtin.apt.
+apt_role_package_state: 'present'
+
+# Default packages for role.
+apt_role_packages:
+  - 'python3-debian'  # deb822 support.
+
+# Default packages for unattended upgrades.
+apt_role_unattended_packages:
+  - 'apt-listchanges'  # installed by default
+  - 'unattended-upgrades'  # installed by default
+  - 'apt-config-auto-update'  # config automation support
+
+# Default packages to enable unattended upgrades on AC power.
+apt_role_ac_power_packages:
+  - 'powermgmt-base'
+
+# Default timeout for long actions (seconds).
+apt_role_timeout: 600
+
+# Default number of polls (count).
+apt_role_poll: 5

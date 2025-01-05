@@ -1,0 +1,62 @@
+---
+# Ensure defaults work with and with unattended upgrades enabled.
+#
+# dist-upgrade will only appear in history.log if action taken (running
+# with no upgrade will not be logged) which will only occur if there is a
+# distribution upgrade before the source container is updated.
+#
+# Decision: ignore testing - this is a simple boolean variable.
+
+dependency:
+  name: 'galaxy'
+driver:
+  name: 'podman'
+provisioner:
+  name: 'ansible'
+  config_options:
+    defaults:
+      interpreter_python: 'auto_silent'
+      callback_whitelist: 'profile_tasks, timer, yaml'
+    ssh_connection:
+      pipelining: false
+  inventory:
+    host_vars:
+      apt-debian-12-default-unattended:
+        apt_unattended_enable: true
+        apt_unattended_automatic_reboot: true
+        apt_unattended_automatic_reboot_time: '04:00'
+platforms:
+  - name: 'apt-debian-12-default'
+    image: 'ghcr.io/hifis-net/debian-systemd:12'
+    systemd: 'always'
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    command: '/lib/systemd/systemd'
+    pre_build_image: true
+  - name: 'apt-debian-12-default-unattended'
+    image: 'ghcr.io/hifis-net/debian-systemd:12'
+    systemd: 'always'
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    command: '/lib/systemd/systemd'
+    pre_build_image: true
+verifier:
+  name: 'ansible'
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    # - 'prepare'
+    - 'converge'
+    # - 'idempotence'  # cache updates
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

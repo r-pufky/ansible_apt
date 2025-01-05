@@ -1,0 +1,104 @@
+---
+- name: 'Apt | verify | sources'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Apt | verify | sources | stat debian-security.sources'
+      ansible.builtin.stat:
+        path: '/etc/apt/sources.list.d/debian-security.sources'
+      register: _test_apt_sources_security
+
+    - name: 'Apt | verify | sources | stat debian.sources'
+      ansible.builtin.stat:
+        path: '/etc/apt/sources.list.d/debian.sources'
+      register: _test_apt_sources
+
+    - name: 'Apt | verify | sources | assert modified sources lists'
+      ansible.builtin.assert:
+        that:
+          - _test_apt_sources_security.stat.exists
+          - _test_apt_sources.stat.exists
+        fail_msg: >
+          /etc/apt/sources.list.d/{debian.sources,debian-security.sources}
+          should exist with default options.
+
+
+- name: 'Apt | verify | unattended'
+  hosts: 'apt-debian-12-unattended'
+  gather_facts: false
+  tasks:
+    - name: 'Apt | verify | unattended | gather installed packages'
+      ansible.builtin.package_facts:
+
+    - name: 'Apt | verify | unattended | gather service status'
+      ansible.builtin.service_facts:
+      register: _test_apt_service
+
+    - name: 'Apt | verify | unattended | stat 20auto-upgrades'
+      ansible.builtin.stat:
+        path: '/etc/apt/apt.conf.d/20auto-upgrades'
+      register: _test_apt_auto_upgrades
+
+    - name: 'Apt | verify | unattended | stat 50unattended-upgrades'
+      ansible.builtin.stat:
+        path: '/etc/apt/apt.conf.d/50unattended-upgrades'
+      register: _test_apt_unattended_upgrades
+
+    - name: 'Apt | verify | unattended | assert packages installed and removed'
+      ansible.builtin.assert:
+        that:
+          - '"apt-listchanges" in ansible_facts.packages'
+          - '"unattended-upgrades" in ansible_facts.packages'
+          - '"apt-config-auto-update" in ansible_facts.packages'
+          - '"powermgmt-base" not in ansible_facts.packages'
+        fail_msg: >
+          apt-listchanges, unattended-upgrades, apt-config-auto-update should
+          be installed. powermgmt-base should not be installed.
+
+    - name: 'Apt | verify | unattended | assert configs exist'
+      ansible.builtin.assert:
+        that:
+          - _test_apt_auto_upgrades.stat.exists
+          - _test_apt_unattended_upgrades.stat.exists
+        fail_msg: >
+          /etc/apt/apt.conf.d/{20auto-upgrades,50unattended-upgrades} should
+          exist.
+
+    - name: 'Apt | verify | unattended | assert services active'
+      ansible.builtin.assert:
+        that:
+          - '"apt-daily.service" in ansible_facts.services'
+          - '"apt-daily-upgrade.service" in ansible_facts.services'
+          - '"unattended-upgrades.service" in ansible_facts.services'
+        fail_msg: >
+          apt-daily, apt-upgrade, unattended-upgrade services should be
+          enabled.
+
+    - name: 'Apt | verify | unattended | execute dry run config check'
+      ansible.builtin.command: 'unattended-upgrade --dry-run'
+      register: _test_apt_unattended_upgrade_check
+      changed_when: false
+      failed_when: _test_apt_unattended_upgrade_check.rc != 0
+
+- name: 'Apt | verify | unattended | enabled'
+  hosts: 'apt-debian-12-default-unattended'
+  gather_facts: false
+  tasks:
+    - name: 'Apt | verify | query expected 52unattended-upgrades-local'
+      ansible.builtin.copy:
+        src: 'files/52unattended-upgrades-local'
+        dest: '/etc/apt/apt.conf.d/52unattended-upgrades-local'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_apt_unattended
+
+    - name: 'Apt | verify | assert expected 52unattended-upgrades-local'
+      ansible.builtin.assert:
+        that:
+          - not _test_apt_unattended.changed
+        fail_msg: >
+          /etc/apt/apt.conf.d/52unattended-upgrades-local is not in expected
+          format: {{ _test_apt_unattended.diff }} (enabled, 04:00).

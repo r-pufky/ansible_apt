@@ -1,0 +1,123 @@
+---
+###############################################################################
+# APT Sources
+###############################################################################
+# Use DEB822 format.
+#
+# apt_sources:
+#     list of dict - ansible.builtin.deb822_repository.
+#   - allow_downgrade_to_insecure: bool - allow downgrading a package that was
+#           previously authenticated but is no longer authenticated.
+#         Default: omit (system default).
+#     allow_insecure: bool - allow insecure repositories
+#         Default: omit (system default).
+#     allow_weak: bool - allow repo signed with a key using a weak algorithm
+#         Default: omit (system default).
+#     architectures: list of str - architectures to search within repository
+#         Default: omit (system default).
+#     by_hash: bool - acquire indexes via a URI constructed from a hashsum of
+#           the expected file instead of using the well-known stable filename.
+#         Default: omit (system default).
+#     check_date: bool - should APT consider the machine time correct?
+#         Default: omit (system default).
+#     check_valid_until: bool - should APT try to detect replay attacks?
+#         Default: omit (system default).
+#     components: list of str - components specify different sections of one
+#           distribution version present in a Suite.
+#         Default: omit (system default).
+#     date_max_future: int - how far (days) in the future a repo may be
+#         Default: omit (system default).
+#     enabled: bool - enable source
+#         Default: omit (system default).
+#     inrelease_path: str - path to the InRelease file, relative to the normal
+#           position of an InRelease file.
+#         Default: omit (system default).
+#     languages: list of str - which language information should be downloaded
+#         Default: omit (system default).
+#     mode: str - octal sources file permission
+#         Default: '0644'
+#     name: str - name of the repo (used for X-Repolib-Name, repo, signing key)
+#     pdiffs: bool - use partial diffs to update old indexes
+#         Default: omit (system default).
+#     signed_by: str - URI, GPG key, ASCII armored GPG public block, absolute
+#             keyring file path, or key fingerprints to verify repository.
+#     state: str - state
+#         Default: 'present'.
+#     suites: list of str - specify an exact path in relation to the URI(s)
+#           provided, in which case the Components: must be omitted and suite
+#           must end with a slash (/). Alternatively, it may take the form of a
+#           distribution version (e.g. a version codename like disco or
+#           artful). If the suite does not specify a path, at least one
+#           component must be present.
+#         Default: omit (system default).
+#     targets: list of str - download targets apt will try to acquire
+#         Default: omit (system default).
+#     trusted: bool - consider trusted or raise warnings when installed
+#         Default: omit (system default).
+#     types: list of str - types of packages from source (deb, deb-src)
+#         Default: ['deb'].
+#     uris: list of str - base Debian distribution archive
+#
+# Default:
+#  - name: 'debian'
+#    types:
+#      - 'deb'
+#      - 'deb-src'
+#    uris: 'http://deb.debian.org/debian'
+#    suites:
+#      - 'bookworm'
+#      - 'bookworm-updates'
+#      - 'bookworm-backports'
+#    components:
+#      - 'main'
+#      - 'contrib'
+#      - 'non-free'
+#      - 'non-free-firmware'
+#    signed_by: '/usr/share/keyrings/debian-archive-keyring.gpg'
+#  - name: 'debian-security'
+#    types:
+#      - 'deb'
+#      - 'deb-src'
+#    uris: 'http://deb.debian.org/debian-security'
+#    suites:
+#      - 'bookworm-security'
+#    components:
+#      - 'main'
+#      - 'contrib'
+#      - 'non-free'
+#      - 'non-free-firmware'
+#    signed_by: '/usr/share/keyrings/debian-archive-keyring.gpg'
+#
+# Reference:
+# * https://wiki.debian.org/SourcesList
+# * https://repolib.readthedocs.io/en/latest/deb822-format.html
+# * https://manpages.debian.org/unstable/apt/sources.list.5.en.html
+apt_sources:
+  - name: 'debian'
+    types:
+      - 'deb'
+      - 'deb-src'
+    uris: 'http://deb.debian.org/debian'
+    suites:
+      - 'bookworm'
+      - 'bookworm-updates'
+      - 'bookworm-backports'
+    components:
+      - 'main'
+      - 'contrib'
+      - 'non-free'
+      - 'non-free-firmware'
+    signed_by: '/usr/share/keyrings/debian-archive-keyring.gpg'
+  - name: 'debian-security'
+    types:
+      - 'deb'
+      - 'deb-src'
+    uris: 'http://deb.debian.org/debian-security'
+    suites:
+      - 'bookworm-security'
+    components:
+      - 'main'
+      - 'contrib'
+      - 'non-free'
+      - 'non-free-firmware'
+    signed_by: '/usr/share/keyrings/debian-archive-keyring.gpg'

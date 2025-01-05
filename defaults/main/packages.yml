@@ -1,0 +1,50 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# APT Packages
+###############################################################################
+
+# Packages to install.
+#
+# Special Case:
+#                         {PACKAGE}*: package use apt verison settings;
+#                                     wildcards allowed.
+#   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: package with specific version
+#                                     constraints, wildcards allowed.
+#
+# Default:
+#   - 'vim'
+#   - 'git'
+#   - 'git-lfs'
+#   - 'curl'
+#   - 'htop'
+#   - 'tmux'
+#
+# Reference:
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-name
+apt_packages:
+  - 'vim'
+  - 'git'
+  - 'git-lfs'
+  - 'curl'
+  - 'htop'
+  - 'tmux'
+
+# Packages to remove.
+#
+# Always removed before installing apt_packages.
+#
+# Special Case:
+#                         {PACKAGE}*: package use apt verison settings;
+#                                     wildcards allowed.
+#   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: package with specific version
+#                                     constraints, wildcards allowed.
+#
+# Default: ['mdadm'].
+#
+# Reference:
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-name
+#
+# Default: ['mdadm'].
+apt_packages_absent:
+  - 'mdadm'

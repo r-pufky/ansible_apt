@@ -1,0 +1,274 @@
+---
+###############################################################################
+# Unattended Updates
+###############################################################################
+# Configures periodic intervals at which unattended upgrades run.
+#
+# To enable automatic updates set apt_unattended_update_package_list and
+# apt_unattended_upgrades.
+#
+# Reference:
+# * https://wiki.debian.org/UnattendedUpgrades
+
+###############################################################################
+# Unattended Periodic Configuration
+###############################################################################
+# Configures the intervals at which unattended upgrades run.
+
+# Enabled periodic upgrades and updates.
+#
+# Special Case:
+#   * Enabling will automatically install required packages.
+#
+# Default: True.
+apt_unattended_enable: false
+
+# Only install updates unattended when on AC power. Default: False.
+apt_unattended_ac_only_enable: false
+
+# Archive backup if changed within interval (days). Default: 0 (disabled).
+apt_unattended_backup_archive_interval: 0
+
+# Number of archive backups to keep.
+#
+# Values:
+#   0: disabled
+#   1: invalid; must be disabled or 2+
+#   2: 2 previous versions
+#   3: 3 previous versions
+#
+# Default: 3.
+apt_unattended_backup_level: 3
+
+# Keep cached files younger than min age (days). Default: 0 (disabled).
+apt_unattended_min_age: 0
+
+# Remove cached files older than max age (days). Default: 0 (disabled).
+apt_unattended_max_age: 0
+
+# Max cache size (oldest cache packages deleted first) (MB).
+#
+# Default: 0 (disabled).
+apt_unattended_max_size: 0
+
+# Update package list interval (days), 0 disables. Default: 1.
+apt_unattended_update_package_list: 1
+
+# Download upgradable packages interval (days). Default: 0 (disabled).
+apt_unattended_download_upgradeable_packages: 0
+
+# Run unattended upgrades interval (days), 0 disables. Default: 1.
+apt_unattended_upgrades: 1
+
+# Autoclean interval (days), 0 disables. Default: 7.
+apt_unattended_autoclean_interval: 7
+
+# Clean interval (days). Default: 0 (disabled).
+apt_unattended_clean_interval: 0
+
+# Root reporting verbosity.
+#
+# Values:
+#   0: no report
+#   1: progress report
+#   2: progress, command outputs
+#   3: progress, command outputs, trace on
+#
+# Default: 0.
+apt_unattended_periodic_verbose: 0
+
+# Randomly wait up to interval before starting (seconds). Default: 1800.
+apt_unattended_random_sleep: 1800
+
+###############################################################################
+# Unattended Upgrades
+###############################################################################
+# Rules for installing unattended upgrades.
+
+# Unattended upgrades origins pattern.
+#
+# A package will be upgraded only if the values in its metadata match all the
+# supplied keywords in a line. (In other words, omitted keywords are wild
+# cards (*)). The keywords originate from the Release file.
+#
+# 'apt-cache policy' will print the available values. Debug with
+# 'unattended-upgrades -d' and looking at the log file.
+#
+# Special Case:
+#         ${distro_id}: Installed origin macro from /etc/apt_version
+#   ${distro_codename}: Installed codename macro from /etc/apt_version
+#               {OMIT}: omitted keywords are wildcards
+#
+# apt_unattended_upgrade_origins_pattern:
+#     list of dict - release specification; macros may be used. Omitted
+#                    keywords are wildcards.
+#   - archive: str - (optional) archive/suite/a
+#     component: str - (optional) component/c
+#     label: str - (optional) label/l
+#     origin: str - (optional) origin/o
+#     codename: str - (optional) codename/n
+#     site: str - (optional) website
+#
+# apt_unattended_upgrade_origins_pattern:
+#   - origin: 'debian'
+#     archive: 'stable'
+#   - origin: 'debian'
+#     archive: 'stable-updates'
+#   - origin: 'debian'
+#     archive: 'proposed-updates'
+#   - origin: 'Debian Backports'
+#     archive: '${distro_codename}-backports'
+#     label: 'Debian Backports'
+#
+# Default:
+#   - origin: 'Debian'
+#     codename: 'S(distro_codename)-updates'
+#   - origin: 'Debian'
+#     codename: '${distro_codename}'
+#     label: 'Debian'
+#   - origin: 'Debian'
+#     codename: '${distro_codename}'
+#     label: 'Debian-Security'
+#   - origin: 'Debian'
+#     codename: '${distro_codename}-security'
+#     label: 'Debian-Security'
+#
+# Reference:
+# * /etc/apt/apt.conf.d/50unattended-upgrades
+apt_unattended_upgrade_origins_pattern:
+  - origin: 'Debian'
+    codename: 'S(distro_codename)-updates'
+  - origin: 'Debian'
+    codename: '${distro_codename}'
+    label: 'Debian'
+  - origin: 'Debian'
+    codename: '${distro_codename}'
+    label: 'Debian-Security'
+  - origin: 'Debian'
+    codename: '${distro_codename}-security'
+    label: 'Debian-Security'
+
+# Package blacklist.
+#
+# Python regular expressions matching packages to exclude.
+#
+# Special Case:
+#     {MATCH}: strings matched from start by default. The following matches all
+#              packages starting with linux-: 'linux-'.
+#           $: use $ to explicitly define the end of a package name. Without
+#              the $, 'libc6' would match all of them:
+#                - 'libc6$'
+#                - 'libc6-dev$'
+#                - 'libc6-i686$'
+#   {SPECIAL}: special characters need escaping: "libstdc\+\+6$"
+#
+# The following matches packages like xen-system-amd64, xen-utils-4.1,
+# xenstore-utils and libxenstore3.0: '(lib)?xen(store)?'.
+#
+# apt_unattended_package_blacklist:
+#   - 'linux-'
+#   - 'libc6-i686$'
+#   - 'libstdc\+\+6$'
+#   - '(lib)?xen(store)?'
+#
+# Default: [] (disabled).
+#
+# Reference:
+# * https://docs.python.org/3/howto/regex.html
+apt_unattended_package_blacklist: []
+
+# Autofix interrupted dpkg installs?
+#
+# On a unclean dpkg exit unattended-upgrades will run
+# 'dpkg --force-confold --configure -a' to ensure updates keep getting
+# installed.
+#
+# Default: True.
+apt_unattended_autofix_interrupted_dpkg: true
+
+# Use minimal steps so upgrades can be interrupted? Default: True.
+apt_unattended_minimal_steps: true
+
+# Install upgrades on shutdown instead of background? Default: False.
+apt_unattended_install_on_shutdown: false
+
+# Send email to this address for problems or packages upgrades.
+#
+# Default: '' (disabled).
+apt_unattended_mail: ''
+
+# Upgrade mail reporting threshold.
+#
+# Values:
+#          always: always send mail for any actions
+#   only-on-error: only mail on error
+#       on-change: only mail on changes
+#
+# Default: 'only-on-error'.
+apt_unattended_mail_report: 'only-on-error'
+
+# Automatically remove unused kernel-related packages? Default: True.
+apt_unattended_remove_unused_kernel_packages: true
+
+# Remove any new unused dependencies after the upgrade? Default: True.
+apt_unattended_remove_new_unused_dependencies: true
+
+# Automatically remove all unused dependencies after the upgrade?
+#
+# Equivalent to 'apt get autoremove'.
+#
+# Default: True.
+apt_unattended_remove_unused_dependencies: true
+
+# Automatically reboot if required? Default: False.
+apt_unattended_automatic_reboot: false
+
+# Automatically reboot even if users are logged in? Default: True.
+apt_unattended_automatic_reboot_with_users: true
+
+# Reboot at specific time instead of immediately (HH:MM).
+#
+# Special Case:
+#   now: (reboot immediately).
+#
+# Default: 'now'.
+apt_unattended_automatic_reboot_time: 'now'
+
+# Download and install upgrades only on AC power? Default: False.
+apt_unattended_only_on_ac_power: true
+
+# Limit apt bandwdith for downloads (KB). Default: 0 (no limit).
+apt_unattended_dl_limit: 0
+
+# Enable logging to syslog. Default: False.
+apt_unattended_syslog_enable: false
+
+# Specify syslog facility. Default: 'daemon'.
+apt_unattended_syslog_facility: 'daemon'
+
+# Skip updates on metered connections? Default: True.
+apt_unattended_skip_updates_on_metered_connections: true
+
+# Verbose logging? Default: False.
+apt_unattended_verbose: false
+
+# Print debug logging? Default: False.
+apt_unattended_debug: false
+
+# Allow downgrades if Pin-Priority exceeds 1000? Default: False.
+apt_unattended_allow_downgrade: false
+
+# Allow apt mark fallback?
+#
+# When APT fails to mark a package to be upgraded or installed try adjusting
+# candidates of related packages to help APT's resolver in finding a solution
+# where the package can be upgraded or installed. This is a workaround until
+# APT's resolver is fixed to always find a solution if it exists. (See Debian
+# bug #711128.)
+#
+# Disabling the fallback speeds up unattended-upgrades when there are
+# uninstallable packages at the expense of rarely keeping back packages which
+# could be upgraded or installed.
+#
+# Default: True.
+apt_unattended_allow_apt_mark_fallback: true
