@@ -13,6 +13,7 @@ apt_role_package_state: 'present'
 # Default packages for role.
 apt_role_packages:
   - 'python3-debian'  # deb822 support.
+  - 'ca-certificates'  # up to date certificates for apt source validation.
 
 # Default packages for unattended upgrades.
 apt_role_unattended_packages:
