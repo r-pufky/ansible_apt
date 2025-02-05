@@ -4,7 +4,7 @@
 # APT Options
 ###############################################################################
 
-# Should apt dist-upgrade be run (after sources updated)? Default: false.
+# Should apt dist-upgrade be run (after sources updated)? Default: False.
 apt_dist_upgrade_enable: false
 
 # Timeout for dist-upgrade to complete (seconds). Default: 600.
