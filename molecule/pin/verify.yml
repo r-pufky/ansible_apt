@@ -1,0 +1,54 @@
+---
+# yamllint disable rule:line-length
+- name: 'Pin | verify'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Pin | verify | query expected /etc/apt/preferences.d/nodejs_keep'
+      ansible.builtin.copy:
+        src: 'files/nodejs_keep'
+        dest: '/etc/apt/preferences.d/nodejs_keep'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_apt_pin_node
+
+    - name: 'Pin | verify | assert /etc/apt/preferences.d/nodejs_keep'
+      ansible.builtin.assert:
+        that:
+          - not _test_apt_pin_node.changed
+        fail_msg: >
+          /etc/apt/preferences.d/nodejs_keep is not in expected format:
+          {{ _test_apt_pin_node.diff }}.
+
+    - name: 'Pin | verify | query expected /etc/apt/preferences.d/emacs_keep_comments'
+      ansible.builtin.copy:
+        src: 'files/emacs_keep_comments'
+        dest: '/etc/apt/preferences.d/emacs_keep_comments'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_apt_pin_emacs
+
+    - name: 'Pin | verify | assert /etc/apt/preferences.d/emacs_keep_comments'
+      ansible.builtin.assert:
+        that:
+          - not _test_apt_pin_emacs.changed
+        fail_msg: >
+          /etc/apt/preferences.d/emacs_keep_comments is not in expected format:
+          {{ _test_apt_pin_emacs.diff }}.
+
+    - name: 'Pin | verify | stat /etc/apt/preferences.d/yarn_remove'
+      ansible.builtin.stat:
+        path: '/etc/apt/preferences.d/yarn_remove'
+      register: _test_apt_pin_yarn
+
+    - name: 'Pin | verify | assert /etc/apt/preferences.d/yarn_remove'
+      ansible.builtin.assert:
+        that:
+          - not _test_apt_pin_yarn.stat.exists
+        fail_msg: '/etc/apt/preferences.d/yarn_remove should be removed.'

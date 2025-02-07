@@ -4,6 +4,13 @@
     name: '{{ apt_role_packages }}'
     state: 'present'
 
+- name: 'Pins'
+  when: apt_pins | length > 0
+  ansible.builtin.include_tasks: 'pin.yml'
+  loop: '{{ apt_pins }}'
+  loop_control:
+    loop_var: pin
+
 - name: 'Sources'
   ansible.builtin.import_tasks: 'sources.yml'
 - name: 'Packages'

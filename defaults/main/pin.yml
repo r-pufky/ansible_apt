@@ -1,0 +1,51 @@
+---
+###############################################################################
+# APT Pin
+###############################################################################
+# APT pins are applied before installing packaged or attempting distribution
+# upgrades.
+#
+# Pin Priorities:
+#       1000+: causes a version to be installed even if this constitutes a
+#              downgrade of the package.
+#    990-1000: causes a version to be installed even if it does not come from
+#              the target release, unless the installed version is more recent.
+#     500-990: causes a version to be installed unless there is a version
+#              available belonging to the target release or the installed
+#              version is more recent
+#     100-500: causes a version to be installed unless there is a version
+#              available belonging to some other distribution or the installed
+#              version is more recent
+#       0-100: causes a version to be installed only if there is no installed
+#              version of the package
+#          <0: prevents the version from being installed
+#           0: has undefined behavior, do not use it.
+#
+# apt_pins:
+#     list of dict - APT package pins.
+#   - name: str - APT pin name (used for pin filename).
+#     package: str - APT package to pin, matching supported.
+#     pin: str - pin specification, matching supported.
+#     pin_priority: int - APT priority to pin to.
+#     comment: str - Pin comment.
+#         Default: ''.
+#     state: str - state.
+#           Values:
+#             'present': install APT pin definition.
+#              'absent': remove APT pin definition.
+#
+# apt_pins:
+#   - name: 'nodejs'
+#     package: 'nodejs'
+#     pin: 'origin deb.nodesource.com'
+#     pin_priority: 1001
+#     state: 'present'
+#   - name: 'old_pin'
+#     state: 'absent'
+#
+# Default: [] (no pins).
+#
+# Reference:
+# * https://manpages.debian.org/bookworm/apt/apt_preferences.5.en.html
+# * https://wiki.debian.org/AptConfiguration
+apt_pins: []

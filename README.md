@@ -52,6 +52,14 @@ apt_apt_sources:
       - 'non-free-firmware'
     signed_by: '/usr/share/keyrings/debian-archive-keyring.gpg'
 apt_dist_upgrade_enable: true
+apt_pins:
+  - name: 'nodejs_keep'
+    package: 'nodejs'
+    pin: 'origin deb.nodesource.com'
+    pin_priority: 1001
+    state: 'present'
+  - name: 'yarn'
+    state: 'absent'
 apt_packages:
   - 'vim'
   - 'git'
@@ -81,7 +89,7 @@ Install packages as part of another role
     apt_update_cache: true
     apt_packages: 'zfsutils-linux'
 ```
-Both of these will automatically manage sources, updates, and packages.
+Both of these will automatically manage pins, sources, updates, and packages.
 
 ## Development
 Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)

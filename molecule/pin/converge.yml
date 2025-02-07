@@ -1,0 +1,16 @@
+---
+- name: 'Pin | converge'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Pin | converge | apply r_pufky.srv.apt'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.apt'
+
+    - name: 'Pin | converge | apply r_pufky.srv.apt (remove yarn)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.apt'
+      vars:
+        apt_pins:
+          - name: 'yarn_remove'
+            state: 'absent'

@@ -1,0 +1,27 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Apt Pin
+###############################################################################
+#
+# Args:
+#   pin: dict - apt_pins dict item.
+#
+# Reference:
+# * https://manpages.debian.org/bookworm/apt/apt_preferences.5.en.html
+# * https://wiki.debian.org/AptConfiguration
+
+- name: 'Pins | remove'
+  when: pin.state == 'absent'
+  ansible.builtin.file:
+    path: '/etc/apt/preferences.d/{{ pin.name }}'
+    state: 'absent'
+
+- name: 'Pin | add'
+  when: pin.state == 'present'
+  ansible.builtin.template:
+    src: 'pin.j2'
+    dest: '/etc/apt/preferences.d/{{ pin.name }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'

@@ -1,0 +1,4 @@
+# some reason this package was pinned.
+Package: emacs
+Pin: release n=unstable
+Pin-Priority: 1001
