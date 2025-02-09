@@ -4,8 +4,7 @@
 ###############################################################################
 # Configures periodic intervals at which unattended upgrades run.
 #
-# To enable automatic updates set apt_unattended_update_package_list and
-# apt_unattended_upgrades.
+# To enable automatic updates set apt_unattended_enable=true.
 #
 # Reference:
 # * https://wiki.debian.org/UnattendedUpgrades

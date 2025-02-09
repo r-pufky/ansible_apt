@@ -23,7 +23,7 @@
           should exist with default options.
 
 - name: 'Default | verify | unattended'
-  hosts: 'apt-debian-12-unattended'
+  hosts: 'apt-debian-12-default-unattended'
   gather_facts: false
   tasks:
     - name: 'Default | verify | unattended | gather installed packages'

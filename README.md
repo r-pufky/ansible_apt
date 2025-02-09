@@ -20,8 +20,20 @@ collection.
 Apply before base OS configuration or separately as a dependency for another
 role. Use group vars to apply defaults to all managed systems.
 
-group_vars/all/vars/apt.yml
+Add sources, dist-upgrade, install packages, and enable automatic updates:
+``` yaml
+- name: 'Manage APT'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.apt'
+  vars:
+    apt_dist_upgrade_enable: true
+    apt_unattended_enable: true
 ```
+
+All aspects of APT may be managed with this role:
+
+group_vars/all/vars/apt.yml
+``` yaml
 apt_apt_sources:
   - name: 'debian'
     types:
