@@ -58,7 +58,7 @@ scenario:
     - 'create'
     # - 'prepare'
     - 'converge'
-    # - 'idempotence'  # cache updates
+    # - 'idempotence'  # apt pin add/remove
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

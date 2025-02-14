@@ -4,8 +4,31 @@
 # APT Options
 ###############################################################################
 
-# Should apt dist-upgrade be run (after sources updated)? Default: False.
+# Always run dist-upgrade?
+#
+# Special Case:
+#   * apt_dist_upgrade_disable has precedence. If both are true, dist-upgrade
+#     will be disabled.
+#
+# Values:
+#    True: always dist-upgrade run during role execution.
+#   False: trigger dist-upgrade run if APT sources are changed (default).
+#
+# Default: False.
 apt_dist_upgrade_enable: false
+
+# Disable dist-upgrade?
+#
+# Special Case:
+#   * Precedence over apt_dist_upgrade_enable. If both are true, dist-upgrade
+#     will be disabled.
+#
+# Values:
+#    True: never dist-upgrade run during role execution.
+#   False: trigger dist-upgrade run if APT sources are changed (default).
+#
+# Default: False.
+apt_dist_upgrade_disable: false
 
 # Timeout for dist-upgrade to complete (seconds). Default: 600.
 apt_timeout: 600

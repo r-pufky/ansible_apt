@@ -1,12 +1,17 @@
 ---
-# Ensure defaults work with and with unattended upgrades enabled.
+# yamllint disable rule:line-length
 #
-# dist-upgrade will only appear in history.log if action taken (running
+# dist-upgrade will only appear in history.log if upgrade action taken (running
 # with no upgrade will not be logged) which will only occur if there is a
 # distribution upgrade before the source container is updated.
 #
-# Decision: ignore testing - this is a simple boolean variable.
-
+# Manual test verification is required.
+#
+# Confirm:
+# * apt_dist_upgrade_enable=false dist-upgrade run once for multiple applications.
+# * apt_dist_upgrade_enable=true dist-upgrade run multiple times for multiple
+#   applications.
+# * apt_dist_upgrade_disable=true disables all dist-upgrades.
 dependency:
   name: 'galaxy'
 driver:
@@ -20,20 +25,30 @@ provisioner:
     ssh_connection:
       pipelining: false
   inventory:
+    group_vars:
+      all:
+        apt_dist_upgrade_enable: false
     host_vars:
-      apt-debian-12-default-unattended:
-        apt_unattended_enable: true
-        apt_unattended_automatic_reboot: true
-        apt_unattended_automatic_reboot_time: '04:00'
+      apt-debian-12-dist_upgrade_disable:
+        apt_dist_upgrade_disable: true
+      apt-debian-12-dist_upgrade_enable:
+        apt_dist_upgrade_enable: true
 platforms:
-  - name: 'apt-debian-12-default'
+  - name: 'apt-debian-12-dist_upgrade'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'apt-debian-12-default-unattended'
+  - name: 'apt-debian-12-dist_upgrade_disable'
+    image: 'ghcr.io/hifis-net/debian-systemd:12'
+    systemd: 'always'
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    command: '/lib/systemd/systemd'
+    pre_build_image: true
+  - name: 'apt-debian-12-dist_upgrade_enable'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:

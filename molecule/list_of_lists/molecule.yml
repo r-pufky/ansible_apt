@@ -44,7 +44,7 @@ scenario:
     - 'create'
     - 'prepare'
     - 'converge'
-    # - 'idempotence'  # cache updates
+    - 'idempotence'
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

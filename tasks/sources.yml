@@ -33,13 +33,17 @@
         types: '{{ item.types | default(["deb"]) }}'
         uris: '{{ item.uris }}'
       loop: '{{ apt_sources }}'
+      register: _apt_sources
 
-    - name: 'Sources | update cache'
+    - name: 'Sources | update cache'  # noqa no-handler trigger immediately if changed
+      when: _apt_sources.changed
       ansible.builtin.apt:
         update_cache: true
 
 - name: 'Sources | distribution'
-  when: apt_dist_upgrade_enable
+  when: >
+    not apt_dist_upgrade_disable and
+    (apt_dist_upgrade_enable or (_apt_sources.changed | default(false)))
   block:
     - name: 'Sources | distribution | upgrade in progress (may take a while)'
       ansible.builtin.debug:

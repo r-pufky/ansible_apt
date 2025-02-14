@@ -1,0 +1,13 @@
+---
+- name: 'Dist upgrade | converge | disabled'
+  hosts: 'apt-debian-12-dist_upgrade_disable'
+  gather_facts: false
+  tasks:
+    - name: 'Dist upgrade | converge | apply r_pufky.srv.apt'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.apt'
+    - name: 'Dist upgrade | converge | apply r_pufky.srv.apt'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.apt'
+      vars:
+        apt_dist_upgrade_enable: true
