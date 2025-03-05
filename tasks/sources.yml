@@ -33,6 +33,8 @@
         types: '{{ item.types | default(["deb"]) }}'
         uris: '{{ item.uris }}'
       loop: '{{ apt_sources }}'
+      loop_control:
+        label: '{{ item.name }}'
       register: _apt_sources
 
     - name: 'Sources | update cache'  # noqa no-handler trigger immediately if changed
