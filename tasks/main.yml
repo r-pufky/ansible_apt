@@ -10,6 +10,7 @@
   loop: '{{ apt_pins }}'
   loop_control:
     loop_var: pin
+    label: '{{ pin.name }}'
 
 - name: 'Sources'
   ansible.builtin.import_tasks: 'sources.yml'

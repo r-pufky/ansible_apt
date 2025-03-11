@@ -11,13 +11,13 @@
 # * https://manpages.debian.org/bookworm/apt/apt_preferences.5.en.html
 # * https://wiki.debian.org/AptConfiguration
 
-- name: 'Pins | remove'
+- name: 'Pins | remove {{ pin.name }}'
   when: pin.state == 'absent'
   ansible.builtin.file:
     path: '/etc/apt/preferences.d/{{ pin.name }}'
     state: 'absent'
 
-- name: 'Pin | add'
+- name: 'Pin | add {{ pin.name }}'
   when: pin.state == 'present'
   ansible.builtin.template:
     src: 'pin.j2'
