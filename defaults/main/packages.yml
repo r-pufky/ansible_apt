@@ -7,7 +7,7 @@
 # Packages to install.
 #
 # Special Case:
-#                         {PACKAGE}*: package use apt verison settings;
+#                         {PACKAGE}*: package use apt version settings;
 #                                     wildcards allowed.
 #   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: package with specific version
 #                                     constraints, wildcards allowed.
@@ -35,7 +35,7 @@ apt_packages:
 # Always removed before installing apt_packages.
 #
 # Special Case:
-#                         {PACKAGE}*: package use apt verison settings;
+#                         {PACKAGE}*: package use apt version settings;
 #                                     wildcards allowed.
 #   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: package with specific version
 #                                     constraints, wildcards allowed.
