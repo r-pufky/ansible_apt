@@ -1,4 +1,14 @@
 ---
+###############################################################################
+# List of Lists
+###############################################################################
+# Ensure list of lists for apt packages work without causing failures. All
+# package specifications should be flatten and executed without error.
+#
+# Tests:
+# * Lists of lists for package installs works.
+# * Lists of lists for package removal works.
+
 dependency:
   name: 'galaxy'
 driver:

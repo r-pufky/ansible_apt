@@ -7,14 +7,12 @@ single call.
 ## Requirements
 [supported platforms](https://github.com/r-pufky/ansible_apt/blob/main/meta/main.yml)
 
-[collections/roles](https://github.com/r-pufky/ansible_apt/blob/main/meta/requirements.yml)
-
 ## Role Variables
 [defaults](https://github.com/r-pufky/ansible_apt/blob/main/defaults/main)
 
 ## Dependencies
-Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
-collection.
+**galaxy-ng** roles cannot be used independently. Part of
+[r_pufky.deb](https://github.com/r-pufky/ansible_collection_deb) collection.
 
 ## Example Playbook
 Apply before base OS configuration or separately as a dependency for another
@@ -24,7 +22,7 @@ Add sources, dist-upgrade, install packages, and enable automatic updates:
 ``` yaml
 - name: 'Manage APT'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
   vars:
     apt_dist_upgrade_enable: true
     apt_unattended_enable: true
@@ -89,14 +87,14 @@ Apply the base role
 ``` yaml
 - name: 'Apply base configuration'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
 ```
 
 Install packages as part of another role
 ``` yaml
 - name: 'Install service packages'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
   vars:
     apt_update_cache: true
     apt_packages: 'zfsutils-linux'
@@ -104,7 +102,7 @@ Install packages as part of another role
 Both of these will automatically manage pins, sources, updates, and packages.
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/docs/dev/environment/README.md)
 
 Run all unit tests:
 ``` bash

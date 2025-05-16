@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Apt Source List
 ###############################################################################
@@ -11,7 +10,8 @@
   block:
     - name: 'Sources | add'
       ansible.builtin.deb822_repository:
-        allow_downgrade_to_insecure: '{{ item.allow_downgrade_to_insecure | default(omit) }}'
+        allow_downgrade_to_insecure:
+          '{{ item.allow_downgrade_to_insecure | default(omit) }}'
         allow_insecure: '{{ item.allow_insecure | default(omit) }}'
         allow_weak: '{{ item.allow_weak | default(omit) }}'
         architectures: '{{ item.architectures | default(omit) }}'
@@ -37,7 +37,7 @@
         label: '{{ item.name }}'
       register: _apt_sources
 
-    - name: 'Sources | update cache'  # noqa no-handler trigger immediately if changed
+    - name: 'Sources | update cache'  # noqa no-handler trigger immediately
       when: _apt_sources.changed
       ansible.builtin.apt:
         update_cache: true
@@ -47,10 +47,10 @@
     not apt_dist_upgrade_disable and
     (apt_dist_upgrade_enable or (_apt_sources.changed | default(false)))
   block:
-    - name: 'Sources | distribution | upgrade in progress (may take a while)'
+    - name: 'Sources | distribution | upgrade in progress 🗘'
       ansible.builtin.debug:
         msg: |
-          Distribution is being upgraded. This will take a few minutes.
+          🗘 Distribution is being upgraded. This will take a few minutes.
 
     - name: 'Sources | distribution | upgrade packages'
       ansible.builtin.apt:

@@ -1,11 +1,24 @@
 ---
-# Ensure defaults work with and with unattended upgrades enabled.
+###############################################################################
+# Default
+###############################################################################
+# Ensure defaults work with and without unattended upgrades enabled.
 #
 # dist-upgrade will only appear in history.log if action taken (running
 # with no upgrade will not be logged) which will only occur if there is a
 # distribution upgrade before the source container is updated.
 #
 # Decision: ignore testing - this is a simple boolean variable.
+#
+# Tests:
+# * apt-daily, apt-daily-upgrade, unattended-upgrades services are active.
+# * sources.list.d/debian-security.sources configured.
+# * sources.list.d/debian.sources configured.
+# * apt.conf.d/20auto-upgrades configured.
+# * apt.conf.d/50unattended-upgrades configured.
+# * apt-listchanges, unattended-upgrades, apt-config-auto-update,
+#   powermgmt-base packages installed.
+# * apt.conf.d/52unattended-upgrades-local configured if enabled.
 
 dependency:
   name: 'galaxy'

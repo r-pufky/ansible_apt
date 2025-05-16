@@ -1,7 +1,4 @@
 ---
-# Ensure list of lists for apt packages work without causing failures. All
-# package specifications should be flatten and executed without error.
-
 - name: 'List of lists | verify'
   hosts: 'all'
   gather_facts: false
@@ -11,6 +8,7 @@
 
     - name: 'List of lists | verify | assert packages installed and removed'
       ansible.builtin.assert:
+        quiet: true
         that:
           - '"vim" in ansible_facts.packages'
           - '"htop" in ansible_facts.packages'
@@ -19,5 +17,5 @@
           - '"curl" not in ansible_facts.packages'
           - '"git-lfs" not in ansible_facts.packages'
         fail_msg: >
-          should be installed: vim, htop, tmux.
+          ✘ should be installed: vim, htop, tmux.
           should be removed: git, curl, git-lfs.

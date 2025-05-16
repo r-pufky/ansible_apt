@@ -1,11 +1,13 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Dist upgrade | verify | disable'
   hosts: 'apt-debian-12-dist_upgrade_disable'
   gather_facts: false
   tasks:
     - name: 'Dist upgrade | verify | disable | APT history.log'
-      ansible.builtin.shell: 'set -o pipefail | grep -ri dist-upgrade /var/log/apt/history.log | wc -l'
+      ansible.builtin.shell: >-
+        set -o pipefail |
+        grep -ri dist-upgrade /var/log/apt/history.log |
+        wc -l
       changed_when: false
       args:
         executable: '/bin/bash'
@@ -13,32 +15,41 @@
 
     - name: 'Dist upgrade | verify | disable | assert no dist-upgrades'
       ansible.builtin.assert:
+        quiet: true
         that:
           - _test_apt_dist_disable.stdout == '0'
-        fail_msg: 'dist-upgrade should not be run. (run {{ _test_apt_dist_disable.stdout }}).'
+        fail_msg: >
+          ✘ dist-upgrade should not be run.
+          (run {{ _test_apt_dist_disable.stdout }}).
 
 - name: 'Dist upgrade | verify | standard'
   hosts: 'apt-debian-12-dist_upgrade'
   gather_facts: false
   tasks:
-    # dist-upgrade run, sources changed
-    - name: 'Dist upgrade | converge | standard | apply r_pufky.srv.apt (dist-upgrade run)'
+    - name: >
+        Dist upgrade | converge | standard |
+        apply r_pufky.deb.apt (dist-upgrade run, sources changed)
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.apt'
-    # dist-upgrade NOT run, sources same
-    - name: 'Dist upgrade | converge | standard | apply r_pufky.srv.apt (dist-upgrade NOT run)'
+        name: 'r_pufky.deb.apt'
+    - name: >
+        Dist upgrade | converge | standard |
+        apply r_pufky.deb.apt (dist-upgrade NOT run, sources same)
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.apt'
-    # dist-upgrade run, sources same, apt_dist_upgrade_enable=true
-    - name: 'Dist upgrade | converge | standard | apply r_pufky.srv.apt (dist-upgrade run)'
+        name: 'r_pufky.deb.apt'
+    - name: >
+        Dist upgrade | converge | standard |
+        apply r_pufky.deb.apt (dist-upgrade run, sources same, upgrade enabled)
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.apt'
+        name: 'r_pufky.deb.apt'
       vars:
         apt_dist_upgrade_enable: true
 
-    - name: 'Dist upgrade | verify | standard | MANUAL VERIFICATION'
+    - name: 'Dist upgrade | verify | standard | MANUAL VERIFICATION ⚠'
       ansible.builtin.debug:
         msg: |
+
+          ⚠ MANUAL VERIFICATION.
+
           Confirm:
             * dist-upgrade run (sources changed)
             * dist-upgrade not run (no source change)
@@ -48,18 +59,23 @@
   hosts: 'apt-debian-12-dist_upgrade_enable'
   gather_facts: false
   tasks:
-    # dist-upgrade run, sources changed
-    - name: 'Dist upgrade | converge | enable | apply r_pufky.srv.apt (dist-upgrade run)'
+    - name: >
+        Dist upgrade | converge | enable |
+        apply r_pufky.deb.apt (dist-upgrade run, sources changed)
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.apt'
-    # dist-upgrade NOT run, sources same
-    - name: 'Dist upgrade | converge | enable | apply r_pufky.srv.apt (dist-upgrade run)'
+        name: 'r_pufky.deb.apt'
+    - name: >
+        Dist upgrade | converge | enable |
+        apply r_pufky.deb.apt (dist-upgrade NOT run, sources same)
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.apt'
+        name: 'r_pufky.deb.apt'
 
-    - name: 'Dist upgrade | verify | standard | MANUAL VERIFICATION'
+    - name: 'Dist upgrade | verify | standard | MANUAL VERIFICATION ⚠'
       ansible.builtin.debug:
         msg: |
+
+          ⚠ MANUAL VERIFICATION.
+
           Confirm:
             * dist-upgrade run (sources changed)
             * dist-upgrade run (no source change)

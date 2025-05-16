@@ -3,6 +3,6 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | converge | apply r_pufky.srv.apt'
+    - name: 'Default | converge | apply r_pufky.deb.apt'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.apt'
+        name: 'r_pufky.deb.apt'

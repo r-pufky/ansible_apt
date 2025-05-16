@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Unattended Updates and Upgrades.
 ###############################################################################
@@ -23,7 +22,8 @@
         autoremove: '{{ apt_package_autoremove | default(true) }}'
         purge: '{{ apt_package_purge | default(true) }}'
         update_cache: '{{ apt_package_update_cache | default(false) }}'
-        install_recommends: '{{ apt_package_install_recommends | default(true) }}'
+        install_recommends:
+          '{{ apt_package_install_recommends | default(true) }}'
         state: 'present'
 
     - name: 'Unattended | install AC power management detection'
@@ -41,7 +41,8 @@
         group: 'root'
         mode: '0644'
 
-    - name: 'Unattended | configure /etc/apt/apt.conf.d/52unattended-upgrades-local'
+    - name: >
+        Unattended | configure /etc/apt/apt.conf.d/52unattended-upgrades-local
       notify: 'Handlers | restart unattended-upgrades'
       ansible.builtin.template:
         src: '52unattended-upgrades-local.j2'

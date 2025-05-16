@@ -1,6 +1,14 @@
 ---
+###############################################################################
+# Pin
+###############################################################################
 # Ensure APT pinning and removal work correctly. Removal of non-existing pin
 # should not lead to role failure.
+#
+# Tests:
+# * APT pin is created correctly.
+# * Removing a non-existent APT pin does not cause role to fail.
+
 dependency:
   name: 'galaxy'
 driver:
