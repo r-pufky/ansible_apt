@@ -30,6 +30,16 @@ apt_dist_upgrade_enable: false
 # Default: False.
 apt_dist_upgrade_disable: false
 
+# Disable /etc/apt/sources.list?
+#
+# Disabled via commenting all lines in /etc/apt/sources.list.
+#
+# Upgraded installs, or ones using stand-alone .deb packages may still use
+# sources.list and may cause APT sourcing conflicts.
+#
+# Default: False.
+apt_sources_list_disable: false
+
 # Timeout for dist-upgrade to complete (seconds). Default: 600.
 apt_timeout: 600
 

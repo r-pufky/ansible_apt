@@ -1,12 +1,12 @@
 ---
-- name: 'List of lists | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'List of lists | verify | gather installed packages'
+    - name: 'Verify | gather installed packages'
       ansible.builtin.package_facts:
 
-    - name: 'List of lists | verify | assert packages installed and removed'
+    - name: 'Verify | assert packages installed and removed'
       ansible.builtin.assert:
         quiet: true
         that:

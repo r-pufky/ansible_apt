@@ -1,9 +1,9 @@
 ---
-- name: 'Dist upgrade | verify | disable'
+- name: 'Verify | disable'
   hosts: 'apt-debian-12-dist_upgrade_disable'
   gather_facts: false
   tasks:
-    - name: 'Dist upgrade | verify | disable | APT history.log'
+    - name: 'Verify | disable | APT history.log'
       ansible.builtin.shell: >-
         set -o pipefail |
         grep -ri dist-upgrade /var/log/apt/history.log |
@@ -13,7 +13,7 @@
         executable: '/bin/bash'
       register: _test_apt_dist_disable
 
-    - name: 'Dist upgrade | verify | disable | assert no dist-upgrades'
+    - name: 'Verify | disable | assert no dist-upgrades'
       ansible.builtin.assert:
         quiet: true
         that:
@@ -22,60 +22,64 @@
           ✘ dist-upgrade should not be run.
           (run {{ _test_apt_dist_disable.stdout }}).
 
-- name: 'Dist upgrade | verify | standard'
+- name: 'Verify | standard'
   hosts: 'apt-debian-12-dist_upgrade'
   gather_facts: false
   tasks:
     - name: >
-        Dist upgrade | converge | standard |
+        Converge | standard |
         apply r_pufky.deb.apt (dist-upgrade run, sources changed)
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'
     - name: >
-        Dist upgrade | converge | standard |
+        Converge | standard |
         apply r_pufky.deb.apt (dist-upgrade NOT run, sources same)
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'
     - name: >
-        Dist upgrade | converge | standard |
+        Converge | standard |
         apply r_pufky.deb.apt (dist-upgrade run, sources same, upgrade enabled)
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'
       vars:
         apt_dist_upgrade_enable: true
 
-    - name: 'Dist upgrade | verify | standard | MANUAL VERIFICATION ⚠'
+    - name: 'Verify | standard | MANUAL VERIFICATION ⚠'
       ansible.builtin.debug:
         msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                       MANUAL VERIFICATION.                        │
+          │                                                                   │
+          │ Confirm:                                                          │
+          │ * dist-upgrade run: source changed                                │
+          │ * dist-upgrade not run: no source change                          │
+          │ * dist-upgrade run: no source change,apt_dist_upgrade_enable=true │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
-          ⚠ MANUAL VERIFICATION.
-
-          Confirm:
-            * dist-upgrade run (sources changed)
-            * dist-upgrade not run (no source change)
-            * dist-upgrade run (no source change, apt_dist_upgrade_enable=true)
-
-- name: 'Dist upgrade | verify | enable'
+- name: 'Verify | enable'
   hosts: 'apt-debian-12-dist_upgrade_enable'
   gather_facts: false
   tasks:
     - name: >
-        Dist upgrade | converge | enable |
+        Converge | enable |
         apply r_pufky.deb.apt (dist-upgrade run, sources changed)
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'
     - name: >
-        Dist upgrade | converge | enable |
+        Converge | enable |
         apply r_pufky.deb.apt (dist-upgrade NOT run, sources same)
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'
 
-    - name: 'Dist upgrade | verify | standard | MANUAL VERIFICATION ⚠'
+    - name: 'Verify | standard | MANUAL VERIFICATION ⚠'
       ansible.builtin.debug:
         msg: |
-
-          ⚠ MANUAL VERIFICATION.
-
-          Confirm:
-            * dist-upgrade run (sources changed)
-            * dist-upgrade run (no source change)
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                       MANUAL VERIFICATION.                        │
+          │                                                                   │
+          │ Confirm:                                                          │
+          │ * dist-upgrade run: source changed                                │
+          │ * dist-upgrade not run: no source change                          │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯

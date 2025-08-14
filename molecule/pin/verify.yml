@@ -1,31 +1,33 @@
 ---
-- name: 'Pin | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | verify | etc/apt/preferences.d/'
+    - name: 'Verify | etc/apt/preferences.d/'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Default | verify | etc/apt/preferences.d/{{ item }}'
+        test_name: 'Verify | etc/apt/preferences.d/{{ item }}'
         test_src: 'files/{{ item }}'
         test_file: '/etc/apt/preferences.d/{{ item }}'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
       loop:
         - 'nodejs_keep'
         - 'emacs_keep_comments'
 
-    - name: 'Pin | verify | /etc/apt/preferences.d/yarn_remove'
+    - name: 'Verify | /etc/apt/preferences.d/yarn_remove'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
-        test_name: 'Default | verify | /etc/apt/preferences.d/yarn_remove'
+        test_name: 'Verify | /etc/apt/preferences.d/yarn_remove'
         test_file: '/etc/apt/preferences.d/yarn_remove'
         test_owner: '{{ omit }}'
         test_group: '{{ omit }}'
         test_mode: '{{ omit }}'
         test_state: 'absent'
+        test_diff: true

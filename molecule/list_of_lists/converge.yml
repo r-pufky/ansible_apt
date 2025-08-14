@@ -1,8 +1,8 @@
 ---
-- name: 'List of lists | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'List of lists | converge | apply r_pufky.deb.apt'
+    - name: 'Converge | apply r_pufky.deb.apt'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'

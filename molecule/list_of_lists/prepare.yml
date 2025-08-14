@@ -1,9 +1,9 @@
 ---
-- name: 'List of lists | prepare'
+- name: 'Prepare'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'List of lists | prepare | add packages to be removed'
+    - name: 'Prepare | add packages to be removed'
       ansible.builtin.apt:
         name:
           - 'git'

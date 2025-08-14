@@ -19,6 +19,8 @@
 # * apt-listchanges, unattended-upgrades, apt-config-auto-update,
 #   powermgmt-base packages installed.
 # * apt.conf.d/52unattended-upgrades-local configured if enabled.
+# * sources.list is disabled correctly for non-existing file (default)
+# * sources.list is disabled correctly for existing file (unattended)
 
 dependency:
   name: 'galaxy'
@@ -33,6 +35,9 @@ provisioner:
     ssh_connection:
       pipelining: false
   inventory:
+    group_vars:
+      all:
+        apt_sources_list_disable: true  # New bullseye+ installs use DEB822.
     host_vars:
       apt-debian-12-default-unattended:
         apt_unattended_enable: true
@@ -66,7 +71,7 @@ scenario:
     - 'destroy'
     - 'syntax'
     - 'create'
-    # - 'prepare'
+    - 'prepare'
     - 'converge'
     - 'idempotence'
     # - 'side_effect'

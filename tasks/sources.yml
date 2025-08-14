@@ -5,6 +5,14 @@
 # Reference:
 # * https://wiki.debian.org/SourcesList
 
+- name: 'Sources | disable sources.list'
+  when: apt_sources_list_disable
+  ansible.builtin.replace:
+    path: '/etc/apt/sources.list'
+    regexp: '^(?!\s*#)(.*)$'
+    replace: '# \1'
+  failed_when: false  # sources.list may already be removed.
+
 - name: 'Sources | modify sources'
   when: apt_sources | length > 0
   block:
@@ -50,7 +58,12 @@
     - name: 'Sources | distribution | upgrade in progress 🗘'
       ansible.builtin.debug:
         msg: |
-          🗘 Distribution is being upgraded. This will take a few minutes.
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                  Distribution is being upgraded.                  │
+          │                   This will take a few minutes.                   │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
     - name: 'Sources | distribution | upgrade packages'
       ansible.builtin.apt:
