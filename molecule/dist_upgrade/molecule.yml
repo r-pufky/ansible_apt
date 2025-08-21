@@ -32,27 +32,27 @@ provisioner:
       all:
         apt_dist_upgrade_enable: false
     host_vars:
-      apt-debian-12-dist_upgrade_disable:
+      apt-debian-13-dist_upgrade_disable:
         apt_dist_upgrade_disable: true
-      apt-debian-12-dist_upgrade_enable:
+      apt-debian-13-dist_upgrade_enable:
         apt_dist_upgrade_enable: true
 platforms:
-  - name: 'apt-debian-12-dist_upgrade'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'apt-debian-13-dist_upgrade'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'apt-debian-12-dist_upgrade_disable'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'apt-debian-13-dist_upgrade_disable'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'apt-debian-12-dist_upgrade_enable'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'apt-debian-13-dist_upgrade_enable'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

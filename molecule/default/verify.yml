@@ -20,7 +20,7 @@
         - '/etc/apt/sources.list.d/debian-security.sources'
 
 - name: 'Verify'
-  hosts: 'apt-debian-12-default-unattended'
+  hosts: 'apt-debian-13-default-unattended'
   gather_facts: false
   tasks:
     - name: 'Verify | unattended'

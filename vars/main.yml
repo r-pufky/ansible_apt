@@ -4,8 +4,8 @@
 ###############################################################################
 
 # Last time debian options were validated against a default configuration.
-apt_role_validate_date: '2024-06-25'
-apt_role_validate_release: 'bookworm'
+apt_role_validate_date: '2025-08-21'
+apt_role_validate_release: 'trixie`'
 
 # Default state for apt package installation. See ansible.builtin.apt.
 apt_role_package_state: 'present'
@@ -21,13 +21,13 @@ apt_role_poll: 5
 ###############################################################################
 
 apt_role_packages:
-  - 'python3-debian'  # deb822 support.
-  - 'ca-certificates'  # up to date certificates for apt source validation.
+  - 'python3-debian'  # DEB822.
+  - 'ca-certificates'  # CA certificates for apt source validation.
 
 apt_role_unattended_packages:
-  - 'apt-listchanges'  # installed by default.
-  - 'unattended-upgrades'  # installed by default.
-  - 'apt-config-auto-update'  # config automation support.
+  - 'apt-listchanges'  # Installed by default.
+  - 'unattended-upgrades'  # Installed by default.
+  - 'apt-config-auto-update'  # Config automation support.
 
 apt_role_ac_power_packages:
-  - 'powermgmt-base'  # power management detection.
+  - 'powermgmt-base'  # Power management detection.

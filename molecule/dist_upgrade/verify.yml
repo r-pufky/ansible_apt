@@ -1,6 +1,6 @@
 ---
 - name: 'Verify | disable'
-  hosts: 'apt-debian-12-dist_upgrade_disable'
+  hosts: 'apt-debian-13-dist_upgrade_disable'
   gather_facts: false
   tasks:
     - name: 'Verify | disable | APT history.log'
@@ -23,7 +23,7 @@
           (run {{ _test_apt_dist_disable.stdout }}).
 
 - name: 'Verify | standard'
-  hosts: 'apt-debian-12-dist_upgrade'
+  hosts: 'apt-debian-13-dist_upgrade'
   gather_facts: false
   tasks:
     - name: >
@@ -48,17 +48,17 @@
       ansible.builtin.debug:
         msg: |
           ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
           │                       MANUAL VERIFICATION.                        │
           │                                                                   │
-          │ Confirm:                                                          │
-          │ * dist-upgrade run: source changed                                │
-          │ * dist-upgrade not run: no source change                          │
-          │ * dist-upgrade run: no source change,apt_dist_upgrade_enable=true │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │ Confirm:
+          │ * dist-upgrade run: source changed
+          │ * dist-upgrade not run: no source change
+          │ * dist-upgrade run: no source change,apt_dist_upgrade_enable=true
 
 - name: 'Verify | enable'
-  hosts: 'apt-debian-12-dist_upgrade_enable'
+  hosts: 'apt-debian-13-dist_upgrade_enable'
   gather_facts: false
   tasks:
     - name: >
@@ -78,8 +78,8 @@
           ╭───────────────────────────────────────────────────────────────────╮
           │                       MANUAL VERIFICATION.                        │
           │                                                                   │
-          │ Confirm:                                                          │
-          │ * dist-upgrade run: source changed                                │
-          │ * dist-upgrade not run: no source change                          │
           │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │ Confirm:
+          │ * dist-upgrade run: source changed
+          │ * dist-upgrade not run: no source change

@@ -1,6 +1,6 @@
 ---
 - name: 'Converge | disabled'
-  hosts: 'apt-debian-12-dist_upgrade_disable'
+  hosts: 'apt-debian-13-dist_upgrade_disable'
   gather_facts: false
   tasks:
     - name: 'Converge | apply r_pufky.deb.apt'

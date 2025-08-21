@@ -39,9 +39,9 @@ apt_apt_sources:
       - 'deb-src'
     uris: 'http://deb.debian.org/debian'
     suites:
-      - 'bookworm'
-      - 'bookworm-updates'
-      - 'bookworm-backports'
+      - 'trixie'
+      - 'trixie-updates'
+      - 'trixie-backports'
     components:
       - 'main'
       - 'contrib'
@@ -54,7 +54,7 @@ apt_apt_sources:
       - 'deb-src'
     uris: 'http://deb.debian.org/debian-security'
     suites:
-      - 'bookworm-security'
+      - 'trixie-security'
     components:
       - 'main'
       - 'contrib'

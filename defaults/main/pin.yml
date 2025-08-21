@@ -46,6 +46,6 @@
 # Default: [] (no pins).
 #
 # Reference:
-# * https://manpages.debian.org/bookworm/apt/apt_preferences.5.en.html
+# * https://manpages.debian.org/trixie/apt/apt_preferences.5.en.html
 # * https://wiki.debian.org/AptConfiguration
 apt_pins: []

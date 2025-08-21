@@ -45,7 +45,7 @@
         label: '{{ item.name }}'
       register: _apt_sources
 
-    - name: 'Sources | update cache'  # noqa no-handler trigger immediately
+    - name: 'Sources | update cache'  # noqa no-handler trigger immediately.
       when: _apt_sources.changed
       ansible.builtin.apt:
         update_cache: true
@@ -60,8 +60,7 @@
         msg: |
           ╭───────────────────────────────────────────────────────────────────╮
           │                                                                   │
-          │                  Distribution is being upgraded.                  │
-          │                   This will take a few minutes.                   │
+          │   Distribution is being upgraded. This will take a few minutes.   │
           │                                                                   │
           ╰───────────────────────────────────────────────────────────────────╯
 

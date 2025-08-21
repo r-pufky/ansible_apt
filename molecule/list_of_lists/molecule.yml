@@ -32,8 +32,8 @@ provisioner:
           - ['curl', 'git-lfs']
         apt_unattended_enable: false
 platforms:
-  - name: 'apt-debian-12-list_of_lists'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'apt-debian-13-list_of_lists'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

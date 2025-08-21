@@ -7,7 +7,7 @@
 #   pin: dict - apt_pins dict item.
 #
 # Reference:
-# * https://manpages.debian.org/bookworm/apt/apt_preferences.5.en.html
+# * https://manpages.debian.org/trixie/apt/apt_preferences.5.en.html
 # * https://wiki.debian.org/AptConfiguration
 
 - name: 'Pins | remove {{ pin.name }}'
