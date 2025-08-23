@@ -6,12 +6,18 @@
 # * https://wiki.debian.org/SourcesList
 
 - name: 'Sources | disable sources.list'
-  when: apt_sources_list_disable
+  when: apt_sources_list_disable and not apt_sources_list_modernize
   ansible.builtin.replace:
     path: '/etc/apt/sources.list'
     regexp: '^(?!\s*#)(.*)$'
     replace: '# \1'
   failed_when: false  # sources.list may already be removed.
+
+- name: 'Sources | modernize sources.list'
+  when: apt_sources_list_modernize
+  ansible.builtin.command: 'apt modernize-sources --assume-yes'
+  register: _apt_modernize
+  changed_when: '{{ "Modernizing" in _apt_modernize.stdout }}'
 
 - name: 'Sources | modify sources'
   when: apt_sources | length > 0

@@ -32,6 +32,8 @@ apt_dist_upgrade_disable: false
 
 # Disable /etc/apt/sources.list?
 #
+# Mutually exclusive with apt_sources_list_modernize.
+#
 # Disabled via commenting all lines in /etc/apt/sources.list.
 #
 # Upgraded installs, or ones using stand-alone .deb packages may still use
@@ -39,6 +41,17 @@ apt_dist_upgrade_disable: false
 #
 # Default: False.
 apt_sources_list_disable: false
+
+# Modernize sources.list?
+#
+# Mutually exclusive with apt_sources_list_disable.
+#
+# Use modernize-sources tool to migrate sources.list to sources.list.d in
+# DEB822 format, creating a backup in sources.list.bak. Highly recommend
+# explicitly defining APT sources manually.
+#
+# Default: False.
+apt_sources_list_modernize: false
 
 # Timeout for dist-upgrade to complete (seconds). Default: 600.
 apt_timeout: 600
