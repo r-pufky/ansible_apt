@@ -17,7 +17,7 @@
   when: apt_sources_list_modernize
   ansible.builtin.command: 'apt modernize-sources --assume-yes'
   register: _apt_modernize
-  changed_when: '{{ "Modernizing" in _apt_modernize.stdout }}'
+  changed_when: "'Modernizing' in _apt_modernize.stdout"
 
 - name: 'Sources | modify sources'
   when: apt_sources | length > 0
