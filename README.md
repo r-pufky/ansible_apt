@@ -102,7 +102,7 @@ Install packages as part of another role
 Both of these will automatically manage pins, sources, updates, and packages.
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/docs/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/ansible/environment.md)
 
 Run all unit tests:
 ``` bash
