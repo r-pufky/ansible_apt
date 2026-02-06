@@ -74,20 +74,16 @@ apt_poll: 5
 # * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
 apt_package_state: 'present'
 
-# Autoremove unused dependencies (except build-dep).
-#
-# Default: True.
+# Autoremove unused dependencies (except build-dep). Default: True.
 #
 # Reference:
-# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-autoremove
 apt_package_autoremove: true
 
-# Purge package configuration files on remove?
-#
-# Default: True.
+# Purge package configuration files on remove? Default: True.
 #
 # Reference:
-# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
+# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-purge
 apt_package_purge: true
 
 # Install recommended packages in addition to apt_packages?
