@@ -7,6 +7,8 @@
   when: apt_packages_absent | length > 0
   ansible.builtin.apt:
     name: '{{ apt_packages_absent | default([]) | flatten }}'
+    allow_unauthenticated:
+      '{{ apt_package_allow_unauthenticated | default(false) }}'
     autoremove: '{{ apt_package_autoremove | default(true) }}'
     purge: '{{ apt_package_purge | default(true) }}'
     update_cache: '{{ apt_package_update_cache | default(false) }}'
@@ -17,6 +19,8 @@
   when: apt_packages | length > 0
   ansible.builtin.apt:
     name: '{{ apt_packages | default([]) | flatten }}'
+    allow_unauthenticated:
+      '{{ apt_package_allow_unauthenticated | default(false) }}'
     autoremove: '{{ apt_package_autoremove | default(true) }}'
     purge: '{{ apt_package_purge | default(true) }}'
     update_cache: '{{ apt_package_update_cache | default(false) }}'

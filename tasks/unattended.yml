@@ -19,6 +19,8 @@
     - name: 'Unattended | install packages'
       ansible.builtin.apt:
         name: '{{ apt_role_unattended_packages }}'
+        allow_unauthenticated:
+          '{{ apt_package_allow_unauthenticated | default(false) }}'
         autoremove: '{{ apt_package_autoremove | default(true) }}'
         purge: '{{ apt_package_purge | default(true) }}'
         update_cache: '{{ apt_package_update_cache | default(false) }}'
