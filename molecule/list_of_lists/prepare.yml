@@ -3,7 +3,7 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Prepare | add packages to be removed'
+    - name: 'Prepare | inject | add packages to be removed'
       ansible.builtin.apt:
         name:
           - 'git'

@@ -7,44 +7,44 @@
 # Packages to install.
 #
 # Special Case:
-#                         {PACKAGE}*: package use apt version settings;
+#                         {PACKAGE}*: Package use apt version settings;
 #                                     wildcards allowed.
-#   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: package with specific version
+#   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: Package with specific version
 #                                     constraints, wildcards allowed.
 #
 # Default:
-#   - 'vim'
-#   - 'git'
-#   - 'git-lfs'
-#   - 'curl'
-#   - 'htop'
-#   - 'tmux'
+#  - 'curl'
+#  - 'git'
+#  - 'git-lfs'
+#  - 'htop'
+#  - 'ncdu'
+#  - 'tmux'
+#  - 'vim'
 #
 # Reference:
 # * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-name
 apt_packages:
-  - 'vim'
+  - 'curl'
   - 'git'
   - 'git-lfs'
-  - 'curl'
   - 'htop'
+  - 'ncdu'
   - 'tmux'
+  - 'vim'
 
 # Packages to remove.
 #
 # Always removed before installing apt_packages.
 #
 # Special Case:
-#                         {PACKAGE}*: package use apt version settings;
+#                         {PACKAGE}*: Package use apt version settings;
 #                                     wildcards allowed.
-#   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: package with specific version
+#   {PACKAGE}[=,>,>=,<=,<]{VERSION}*: Package with specific version
 #                                     constraints, wildcards allowed.
 #
 # Default: ['mdadm'].
 #
 # Reference:
 # * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-name
-#
-# Default: ['mdadm'].
 apt_packages_absent:
   - 'mdadm'

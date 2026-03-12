@@ -10,17 +10,27 @@
 #
 # Decision: ignore testing - this is a simple boolean variable.
 #
-# Tests:
-# * apt-daily, apt-daily-upgrade, unattended-upgrades services are active.
-# * sources.list.d/debian-security.sources configured.
-# * sources.list.d/debian.sources configured.
-# * apt.conf.d/20auto-upgrades configured.
-# * apt.conf.d/50unattended-upgrades configured.
-# * apt-listchanges, unattended-upgrades, apt-config-auto-update,
-#   powermgmt-base packages installed.
-# * apt.conf.d/52unattended-upgrades-local configured if enabled.
-# * sources.list is disabled correctly for non-existing file (default)
-# * sources.list is disabled correctly for existing file (unattended)
+# Tests (default):
+# * Configured files:
+#   * sources.list.d/debian-security.sources
+#   * sources.list.d/debian.sources
+#   * apt.conf.d/20auto-upgrades
+#   * apt.conf.d/50unattended-upgrades
+# * Services active:
+#   * apt-daily
+#   * apt-daily-upgrade
+#   * unattended-upgrades
+# * Packages installed:
+#   * apt-listchanges
+#   * unattended-upgrades
+#   * apt-config-auto-update
+#   * powermgmt-base
+# * sources.list is disabled correctly for non-existing file.
+#
+# Tests (unattended):
+# * Configured files:
+#   * apt.conf.d/52unattended-upgrades-local
+# * sources.list is disabled correctly for existing file.
 
 dependency:
   name: 'galaxy'
@@ -37,21 +47,21 @@ provisioner:
   inventory:
     group_vars:
       all:
-        apt_sources_list_disable: true
+        apt_srv_sources_list_disable: true
     host_vars:
-      apt-debian-13-default-unattended:
-        apt_unattended_enable: true
-        apt_unattended_automatic_reboot: true
-        apt_unattended_automatic_reboot_time: '04:00'
+      apt-default-unattended:
+        apt_uu_enable: true
+        apt_uu_automatic_reboot: true
+        apt_uu_automatic_reboot_time: '04:00'
 platforms:
-  - name: 'apt-debian-13-default'
+  - name: 'apt-default'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'apt-debian-13-default-unattended'
+  - name: 'apt-default-unattended'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
@@ -60,21 +70,13 @@ platforms:
     pre_build_image: true
 verifier:
   name: 'ansible'
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
 scenario:
   test_sequence:
-    # - 'dependency'
-    # - 'cleanup'
     - 'destroy'
     - 'syntax'
     - 'create'
     - 'prepare'
     - 'converge'
     - 'idempotence'
-    # - 'side_effect'
     - 'verify'
-    # - 'cleanup'
     - 'destroy'

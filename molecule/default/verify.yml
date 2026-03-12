@@ -3,12 +3,12 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | sources'
+    - name: 'Verify | test | /etc/apt/sources.list.d/'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'file.yml'
       vars:
-        test_name: 'Verify | sources | {{ item }}'
+        test_name: '{{ "Verify | test | " ~ item }}'
         test_file: '{{ item }}'
         test_owner: 'root'
         test_group: 'root'
@@ -20,15 +20,15 @@
         - '/etc/apt/sources.list.d/debian-security.sources'
 
 - name: 'Verify'
-  hosts: 'apt-debian-13-default-unattended'
+  hosts: 'apt-default-unattended'
   gather_facts: false
   tasks:
-    - name: 'Verify | unattended'
+    - name: 'Verify | test | /etc/apt/apt.conf.d/'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'file.yml'
       vars:
-        test_name: 'Verify | unattended | {{ item }}'
+        test_name: '{{ "Verify | test | " ~ item }}'
         test_file: '{{ item }}'
         test_owner: 'root'
         test_group: 'root'
@@ -39,13 +39,13 @@
         - '/etc/apt/apt.conf.d/20auto-upgrades'
         - '/etc/apt/apt.conf.d/50unattended-upgrades'
 
-    - name: 'Verify | unattended | gather installed packages'
+    - name: 'Verify | fact | query installed packages'
       ansible.builtin.package_facts:
 
-    - name: 'Verify | unattended | gather service status'
+    - name: 'Verify | fact | query service status'
       ansible.builtin.service_facts:
 
-    - name: 'Verify | unattended | assert packages installed/removed'
+    - name: 'Verify | assert | unattended packages installed/removed'
       ansible.builtin.assert:
         quiet: true
         that:
@@ -53,33 +53,46 @@
           - '"unattended-upgrades" in ansible_facts.packages'
           - '"apt-config-auto-update" in ansible_facts.packages'
           - '"powermgmt-base" not in ansible_facts.packages'
-        fail_msg: >
-          ✘ apt-listchanges, unattended-upgrades, apt-config-auto-update
-          should be installed. powermgmt-base should not be installed.
+        fail_msg: |
 
-    - name: 'Verify | unattended | assert services active'
+          ✘ Package state incorrect:
+
+          Should be installed:
+          * apt-listchanges
+          * unattended-upgrades
+          * apt-config-auto-update
+
+          Should NOT be installed:
+          * powermgmt-base
+
+    - name: 'Verify | assert | services active'
       ansible.builtin.assert:
         quiet: true
         that:
           - '"apt-daily.service" in ansible_facts.services'
           - '"apt-daily-upgrade.service" in ansible_facts.services'
           - '"unattended-upgrades.service" in ansible_facts.services'
-        fail_msg: >
-          ✘ apt-daily, apt-upgrade, unattended-upgrade services should be
-          enabled.
+        fail_msg: |
 
-    - name: 'Verify | unattended | execute dry run config check'
+          ✘ Services should be enabled:
+
+          * apt-daily
+          * apt-upgrade
+          * unattended-upgrade
+
+    - name: 'Verify | cmd | execute dry run config check'
       ansible.builtin.command: 'unattended-upgrade --dry-run'
-      register: _test_apt_unattended_upgrade_check
+      register: apt__test_unattended_upgrade_check
       changed_when: false
-      failed_when: _test_apt_unattended_upgrade_check.rc != 0
+      failed_when: apt__test_unattended_upgrade_check.rc != 0
 
-    - name: 'Verify | 52unattended-upgrades-local'
+    - name: 'Verify | test | /etc/apt/apt.conf.d/52unattended-upgrades-local'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | 52unattended-upgrades-local'
+        test_name:
+          'Verify | test | /etc/apt/apt.conf.d/52unattended-upgrades-local'
         test_src: 'files/52unattended-upgrades-local'
         test_file: '/etc/apt/apt.conf.d/52unattended-upgrades-local'
         test_owner: 'root'
@@ -87,12 +100,12 @@
         test_mode: '0644'
         test_diff: true
 
-    - name: 'Verify | unattended | sources.list disabled'
+    - name: 'Verify | test | /etc/apt/sources.list'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | unattended | sources.list disabled'
+        test_name: 'Verify | test | /etc/apt/sources.list'
         test_src: 'files/sources.list.disabled'
         test_file: '/etc/apt/sources.list'
         test_owner: 'root'

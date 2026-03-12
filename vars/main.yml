@@ -1,33 +1,33 @@
 ---
 ###############################################################################
-# Debian Role Options
+# APT Role Options
 ###############################################################################
 
-# Last time debian options were validated against a default configuration.
-apt_role_validate_date: '2025-08-21'
-apt_role_validate_release: 'trixie`'
+apt___release: "{{ {} | r_pufky.data.v3(
 
-# Default state for apt package installation. See ansible.builtin.apt.
-apt_role_package_state: 'present'
+    _date='2026-03-08',
+    _debian='trixie',
+  ) }}"
 
-# Default timeout for long actions (seconds).
-apt_role_timeout: 600
+apt___app: "{{ {} | r_pufky.data.v3(
 
-# Default number of polls (count).
-apt_role_poll: 5
+    _state='present',
+    _timeout=600,
+    _poll=5,
+  ) }}"
 
 ###############################################################################
 # APT Packages
 ###############################################################################
 
-apt_role_packages:
+apt___packages:
   - 'python3-debian'  # DEB822.
   - 'ca-certificates'  # CA certificates for apt source validation.
 
-apt_role_unattended_packages:
+apt___unattended_packages:
   - 'apt-listchanges'  # Installed by default.
   - 'unattended-upgrades'  # Installed by default.
   - 'apt-config-auto-update'  # Config automation support.
 
-apt_role_ac_power_packages:
+apt___ac_power_packages:
   - 'powermgmt-base'  # Power management detection.

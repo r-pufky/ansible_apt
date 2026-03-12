@@ -1,12 +1,12 @@
 ---
 - name: 'Prepare'
-  hosts: 'apt-debian-13-default-unattended'
+  hosts: 'apt-default-unattended'
   gather_facts: false
   tasks:
-    - name: 'Prepare | set sources.list'
+    - name: 'Prepare | inject | /etc/apt/sources.list'
       ansible.builtin.copy:
         src: 'files/sources.list'
-        dest: 'etc/apt/sources.list'
+        dest: '/etc/apt/sources.list'
         owner: 'root'
         group: 'root'
         mode: '0644'

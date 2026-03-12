@@ -3,10 +3,10 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | gather installed packages'
+    - name: 'Verify | fact | query installed packages'
       ansible.builtin.package_facts:
 
-    - name: 'Verify | assert packages installed and removed'
+    - name: 'Verify | assert | package install/remove state correct'
       ansible.builtin.assert:
         quiet: true
         that:
@@ -16,6 +16,16 @@
           - '"git" not in ansible_facts.packages'
           - '"curl" not in ansible_facts.packages'
           - '"git-lfs" not in ansible_facts.packages'
-        fail_msg: >
-          ✘ should be installed: vim, htop, tmux.
-          should be removed: git, curl, git-lfs.
+        fail_msg: |
+
+          ✘ Package state not correct.
+
+          Should be installed:
+          * vim
+          * htop
+          * tmux
+
+          Should be removed:
+          * git
+          * curl
+          * git-lfs

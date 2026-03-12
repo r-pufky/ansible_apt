@@ -5,24 +5,24 @@
 # Reference:
 # * https://wiki.debian.org/SourcesList
 
-- name: 'Sources | disable sources.list'
-  when: apt_sources_list_disable and not apt_sources_list_modernize
+- name: 'Sources | filesystem | disable /etc/apt/sources.list'
+  when: apt_srv_sources_list_disable and not apt_srv_sources_list_modernize
   ansible.builtin.replace:
     path: '/etc/apt/sources.list'
     regexp: '^(?!\s*#)(.*)$'
     replace: '# \1'
   failed_when: false  # sources.list may already be removed.
 
-- name: 'Sources | modernize sources.list'
-  when: apt_sources_list_modernize
+- name: 'Sources | apt | modernize sources'
+  when: apt_srv_sources_list_modernize
   ansible.builtin.command: 'apt modernize-sources --assume-yes'
-  register: _apt_modernize
-  changed_when: "'Modernizing' in _apt_modernize.stdout"
+  register: apt__modernize
+  changed_when: "'Modernizing' in apt__modernize.stdout"
 
-- name: 'Sources | modify sources'
+- name: 'Sources | filesystem | modify sources'
   when: apt_sources | length > 0
   block:
-    - name: 'Sources | add'
+    - name: '{{ "Sources | filesystem | set deb822" }}'
       ansible.builtin.deb822_repository:
         allow_downgrade_to_insecure:
           '{{ item.allow_downgrade_to_insecure | default(omit) }}'
@@ -35,6 +35,8 @@
         date_max_future: '{{ item.date_max_future | default(omit) }}'
         enabled: '{{ item.enabled | default(omit) }}'
         inrelease_path: '{{ item.inrelease_path | default(omit) }}'
+        install_python_debian:
+          '{{ item.install_python_debian | default(false) }}'
         languages: '{{ item.languages | default(omit) }}'
         mode: '{{ item.mode | default("0644") }}'
         name: '{{ item.name }}'
@@ -49,31 +51,26 @@
       loop: '{{ apt_sources }}'
       loop_control:
         label: '{{ item.name }}'
-      register: _apt_sources
+      register: apt__sources
 
-    - name: 'Sources | update cache'  # noqa no-handler trigger immediately.
-      when: _apt_sources.changed
+    - name: 'Sources | apt | update cache'  # noqa no-handler immediate.
+      when: apt__sources.changed
       ansible.builtin.apt:
         update_cache: true
 
 - name: 'Sources | distribution'
   when: >
-    not apt_dist_upgrade_disable and
-    (apt_dist_upgrade_enable or (_apt_sources.changed | default(false)))
+    not apt_srv_dist_upgrade_disable and
+    (apt_srv_dist_upgrade_always or (apt__sources.changed | default(false)))
   block:
-    - name: 'Sources | distribution | upgrade in progress 🗘'
+    - name: 'Sources | distribution | upgrade in progress (~2 minutes) 🗘'
       ansible.builtin.debug:
-        msg: |
-          ╭───────────────────────────────────────────────────────────────────╮
-          │                                                                   │
-          │   Distribution is being upgraded. This will take a few minutes.   │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+        msg: 'Distribution is being upgraded (~2 minutes).'
 
     - name: 'Sources | distribution | upgrade packages'
       ansible.builtin.apt:
         upgrade: 'dist'
-        state: '{{ apt_package_state | default(apt_role_package_state) }}'
+        state: '{{ apt_srv_package_state | default(apt___app._state) }}'
         update_cache: true
-      async: '{{ apt_timeout | default(apt_role_timeout) }}'
-      poll: '{{ apt_poll | default(apt_role_poll) }}'
+      async: '{{ apt_srv_timeout | default(apt___app._timeout) }}'
+      poll: '{{ apt_srv_poll | default(apt___app._poll) }}'

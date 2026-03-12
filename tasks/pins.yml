@@ -1,6 +1,6 @@
 ---
 ###############################################################################
-# Apt Pin
+# Apt Pins
 ###############################################################################
 #
 # Args:
@@ -10,17 +10,17 @@
 # * https://manpages.debian.org/trixie/apt/apt_preferences.5.en.html
 # * https://wiki.debian.org/AptConfiguration
 
-- name: 'Pins | remove {{ pin.name }}'
+- name: '{{ "Pins | filesystem | remove /etc/apt/preferences.d/" ~ pin.name }}'
   when: pin.state == 'absent'
   ansible.builtin.file:
-    path: '/etc/apt/preferences.d/{{ pin.name }}'
+    path: '{{ "/etc/apt/preferences.d/" ~ pin.name }}'
     state: 'absent'
 
-- name: 'Pin | add {{ pin.name }}'
+- name: '{{ "Pin | filesystem | set /etc/apt/preferences.d/" ~ pin.name }}'
   when: pin.state == 'present'
   ansible.builtin.template:
     src: 'pin.j2'
-    dest: '/etc/apt/preferences.d/{{ pin.name }}'
+    dest: '{{ "/etc/apt/preferences.d/" ~ pin.name }}'
     owner: 'root'
     group: 'root'
     mode: '0644'

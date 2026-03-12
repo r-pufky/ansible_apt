@@ -1,12 +1,12 @@
 ---
-- name: 'Install packages'
+- name: 'Install | packages'
   ansible.builtin.apt:
-    name: '{{ apt_role_packages }}'
+    name: '{{ apt___packages }}'
     state: 'present'
 
 - name: 'Pins'
   when: apt_pins | length > 0
-  ansible.builtin.include_tasks: 'pin.yml'
+  ansible.builtin.include_tasks: 'pins.yml'
   loop: '{{ apt_pins }}'
   loop_control:
     loop_var: 'pin'
@@ -16,5 +16,7 @@
   ansible.builtin.import_tasks: 'sources.yml'
 - name: 'Packages'
   ansible.builtin.import_tasks: 'packages.yml'
+
 - name: 'Unattended'
+  when: apt_uu_enable
   ansible.builtin.import_tasks: 'unattended.yml'

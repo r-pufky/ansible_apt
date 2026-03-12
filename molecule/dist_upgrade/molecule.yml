@@ -8,12 +8,16 @@
 #
 # Manual test verification is required.
 #
-# Tests:
-# * apt_dist_upgrade_enable=false dist-upgrade run once for multiple
+# Tests (dist_upgrade):
+# * apt_srv_dist_upgrade_always=false dist-upgrade run once for multiple
 #   applications.
-# * apt_dist_upgrade_enable=true dist-upgrade run multiple times for multiple
-#   applications.
-# * apt_dist_upgrade_disable=true disables all dist-upgrades.
+#
+# Tests (dist_upgrade_disable):
+# * apt_srv_dist_upgrade_always=true dist-upgrade run multiple times for
+#   multiple applications.
+#
+# Tests (dist_upgrade_enable):
+# * apt_srv_dist_upgrade_disable=true disables all dist-upgrades.
 
 dependency:
   name: 'galaxy'
@@ -30,28 +34,28 @@ provisioner:
   inventory:
     group_vars:
       all:
-        apt_dist_upgrade_enable: false
+        apt_srv_dist_upgrade_always: false
     host_vars:
-      apt-debian-13-dist_upgrade_disable:
-        apt_dist_upgrade_disable: true
-      apt-debian-13-dist_upgrade_enable:
-        apt_dist_upgrade_enable: true
+      apt-dist-upgrade-disable:
+        apt_srv_dist_upgrade_disable: true
+      apt-dist-upgrade-enable:
+        apt_srv_dist_upgrade_always: true
 platforms:
-  - name: 'apt-debian-13-dist_upgrade'
+  - name: 'apt-dist-upgrade'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'apt-debian-13-dist_upgrade_disable'
+  - name: 'apt-dist-upgrade-disable'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'apt-debian-13-dist_upgrade_enable'
+  - name: 'apt-dist-upgrade-enable'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
@@ -60,21 +64,12 @@ platforms:
     pre_build_image: true
 verifier:
   name: 'ansible'
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
 scenario:
   test_sequence:
-    # - 'dependency'
-    # - 'cleanup'
     - 'destroy'
     - 'syntax'
     - 'create'
-    # - 'prepare'
     - 'converge'
     - 'idempotence'
-    # - 'side_effect'
     - 'verify'
-    # - 'cleanup'
     - 'destroy'

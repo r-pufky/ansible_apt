@@ -1,38 +1,37 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
-# APT Options
+# Service
 ###############################################################################
 
 # Always run dist-upgrade?
 #
 # Special Case:
-#   * apt_dist_upgrade_disable has precedence. If both are true, dist-upgrade
-#     will be disabled.
+#   * apt_srv_dist_upgrade_disable has precedence. If both are true,
+#     dist-upgrade will be disabled.
 #
 # Values:
-#    True: always dist-upgrade run during role execution.
-#   False: trigger dist-upgrade run if APT sources are changed (default).
+#    True: Always dist-upgrade run during role execution.
+#   False: Trigger dist-upgrade run if APT sources are changed (default).
 #
 # Default: False.
-apt_dist_upgrade_enable: false
+apt_srv_dist_upgrade_always: false
 
 # Disable dist-upgrade?
 #
 # Special Case:
-#   * Precedence over apt_dist_upgrade_enable. If both are true, dist-upgrade
-#     will be disabled.
+#   * Precedence over apt_srv_dist_upgrade_always. If both are true,
+#     dist-upgrade will be disabled.
 #
 # Values:
-#    True: never dist-upgrade run during role execution.
-#   False: trigger dist-upgrade run if APT sources are changed (default).
+#    True: Never dist-upgrade run during role execution.
+#   False: Trigger dist-upgrade run if APT sources are changed (default).
 #
 # Default: False.
-apt_dist_upgrade_disable: false
+apt_srv_dist_upgrade_disable: false
 
 # Disable /etc/apt/sources.list?
 #
-# Mutually exclusive with apt_sources_list_modernize.
+# Mutually exclusive with apt_srv_sources_list_modernize.
 #
 # Disabled via commenting all lines in /etc/apt/sources.list.
 #
@@ -40,68 +39,57 @@ apt_dist_upgrade_disable: false
 # sources.list and may cause APT sourcing conflicts.
 #
 # Default: False.
-apt_sources_list_disable: false
+apt_srv_sources_list_disable: false
 
 # Modernize sources.list?
 #
-# Mutually exclusive with apt_sources_list_disable.
+# Mutually exclusive with apt_srv_sources_list_disable.
 #
 # Use modernize-sources tool to migrate sources.list to sources.list.d in
 # DEB822 format, creating a backup in sources.list.bak. Highly recommend
 # explicitly defining APT sources manually.
 #
 # Default: False.
-apt_sources_list_modernize: false
+apt_srv_sources_list_modernize: false
 
 # Timeout for dist-upgrade to complete (seconds). Default: 600.
-apt_timeout: 600
+apt_srv_timeout: 600
 
-# Number of polling attempts between apt_timeout (count). Default: 5.
-apt_poll: 5
+# Number of polling attempts between apt_srv_timeout (count). Default: 5.
+apt_srv_poll: 5
+
+# Ansible APT Defaults
+###############################################################################
+# Defaults used when calling ansible.builtin.apt within the role.
 
 # Ansible APT package state.
 #
 # Values:
-#      absent: remove apt_packages
-#   build-dep: install build dependencies with apt_packages
-#      latest: install latest apt_packages version
-#     present: ensure apt_packages are installed
-#       fixed: attempt to fix installed apt_packages
+#      absent: Remove apt_packages.
+#   build-dep: Install build dependencies with apt_packages.
+#      latest: Install latest apt_packages version.
+#     present: Ensure apt_packages are installed.
+#       fixed: Attempt to fix installed apt_packages.
 #
 # Default: 'present'.
-#
-# Reference:
-# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-state
-apt_package_state: 'present'
+apt_srv_package_state: 'present'
 
 # Autoremove unused dependencies (except build-dep). Default: True.
-#
-# Reference:
-# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-autoremove
-apt_package_autoremove: true
+apt_srv_package_autoremove: true
 
 # Purge package configuration files on remove? Default: True.
-#
-# Reference:
-# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-purge
-apt_package_purge: true
+apt_srv_package_purge: true
 
 # Install recommended packages in addition to apt_packages?
 #
 # Suggested packages are never installed.
 #
 # Default: True.
-#
-# Reference:
-# *https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-install_recommends
-apt_package_install_recommends: true
+apt_srv_package_install_recommends: true
 
 # Update APT cache before package operation?
 #
 # dist-upgrades will **always** update cache.
 #
 # Default: False.
-#
-# Reference:
-# * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-update_cache
-apt_package_update_cache: false
+apt_srv_package_update_cache: false

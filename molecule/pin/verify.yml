@@ -3,14 +3,14 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | etc/apt/preferences.d/'
+    - name: 'Verify | test | /etc/apt/preferences.d/'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | etc/apt/preferences.d/{{ item }}'
+        test_name: '{{ "Verify | test | etc/apt/preferences.d/" ~ item }}'
         test_src: 'files/{{ item }}'
-        test_file: '/etc/apt/preferences.d/{{ item }}'
+        test_file: '{{ "/etc/apt/preferences.d/" ~ item }}'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
@@ -19,15 +19,15 @@
         - 'nodejs_keep'
         - 'emacs_keep_comments'
 
-    - name: 'Verify | /etc/apt/preferences.d/yarn_remove'
+    - name: 'Verify | test | /etc/apt/preferences.d/yarn_remove'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'file.yml'
       vars:
-        test_name: 'Verify | /etc/apt/preferences.d/yarn_remove'
+        test_name: 'Verify | test | /etc/apt/preferences.d/yarn_remove'
         test_file: '/etc/apt/preferences.d/yarn_remove'
-        test_owner: '{{ omit }}'
-        test_group: '{{ omit }}'
-        test_mode: '{{ omit }}'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
         test_state: 'absent'
         test_diff: true
