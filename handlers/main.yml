@@ -4,7 +4,7 @@
 ###############################################################################
 
 - name: 'Handlers | unattended-upgrades'
-  ansible.builtin.service:
+  ansible.builtin.systemd:
     name: 'unattended-upgrades'
     state: 'restarted'
     enabled: true

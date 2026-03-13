@@ -48,7 +48,7 @@
         apt_srv_dist_upgrade_always: true
 
     # yamllint disable rule:line-length
-    - name: 'Verify | MANUAL VERIFICATION ⚠'
+    - name: 'Verify | ⚠ MANUAL VERIFICATION REQUIRED ⚠'
       ansible.builtin.debug:
         msg: |
 
@@ -73,7 +73,7 @@
       ansible.builtin.include_role:
         name: 'r_pufky.deb.apt'
 
-    - name: 'Verify | MANUAL VERIFICATION ⚠'
+    - name: 'Verify | ⚠ MANUAL VERIFICATION REQUIRED ⚠'
       ansible.builtin.debug:
         msg: |
 

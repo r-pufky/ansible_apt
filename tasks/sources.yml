@@ -63,7 +63,7 @@
     not apt_srv_dist_upgrade_disable and
     (apt_srv_dist_upgrade_always or (apt__sources.changed | default(false)))
   block:
-    - name: 'Sources | distribution | upgrade in progress (~2 minutes) 🗘'
+    - name: 'Sources | distribution | 🗘 upgrade in progress (~2 minutes) 🗘'
       ansible.builtin.debug:
         msg: 'Distribution is being upgraded (~2 minutes).'
 
