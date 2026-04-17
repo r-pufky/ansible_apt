@@ -1,0 +1,9 @@
+---
+- name: 'Verify'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    # Only check for runtime errors as all tasks are included roles.
+    - name: 'Verify | TEST CASES PASSED ✔'
+      ansible.builtin.debug:
+        msg: '✔ TEST CASES PASSED'

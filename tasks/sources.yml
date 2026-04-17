@@ -63,6 +63,21 @@
     not apt_srv_dist_upgrade_disable and
     (apt_srv_dist_upgrade_always or (apt__sources.changed | default(false)))
   block:
+    - name: 'Sources | distribution | query /boot'
+      when: apt_srv_auto_grub_boot
+      ansible.builtin.command: 'grub-probe --target=disk /boot'
+      changed_when: false
+      failed_when: false  # Containers will not have command.
+      register: apt__grub_boot
+
+    - name: 'Sources | distribution | set grub-pc /boot'
+      when: apt_srv_auto_grub_boot and apt__grub_boot.rc == 0
+      ansible.builtin.debconf:
+        name: 'grub-pc'
+        question: 'grub-pc/install_devices'
+        value: '{{ apt__grub_boot.stdout_lines | first | trim }}'
+        vtype: 'multiselect'
+
     - name: 'Sources | distribution | 🗘 upgrade in progress (~2 minutes) 🗘'
       ansible.builtin.debug:
         msg: 'Distribution is being upgraded (~2 minutes).'

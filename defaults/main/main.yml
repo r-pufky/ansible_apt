@@ -29,6 +29,19 @@ apt_srv_dist_upgrade_always: false
 # Default: False.
 apt_srv_dist_upgrade_disable: false
 
+# Automatically determine GRUB boot disk?
+#
+# In cases where dist-upgrade also upgrades grub-pc, a disk must be specified
+# or the upgrade will require interactive resolution. Enabling uses grub-probe
+# to determine disk associated with /boot use that during upgrade.
+#
+# Complex systems may require manual resolution and may result in broken
+# systems. In most cases this should be disabled. This has no effect on
+# containers.
+#
+# Default: False.
+apt_srv_auto_grub_boot: false
+
 # Disable /etc/apt/sources.list?
 #
 # Mutually exclusive with apt_srv_sources_list_modernize.

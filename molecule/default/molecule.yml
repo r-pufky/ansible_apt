@@ -48,6 +48,7 @@ provisioner:
     group_vars:
       all:
         apt_srv_sources_list_disable: true
+        apt_srv_auto_grub_boot: true  # Test no effect for containers.
     host_vars:
       apt-default-unattended:
         apt_uu_enable: true
